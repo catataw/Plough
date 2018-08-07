@@ -108,7 +108,7 @@ class ProjectProcessAction extends Action
      */
     public function deleteProcess($id){
         $process = M('project_process');
-        if($process->where('relatedId='.$id)->delete()){
+        if($process->where('id='.$id)->delete()){
             $projects = M('projects');
             $projectName = $projects->where('id=' . $id)->field('projectName')->select();
             $logs = M('logs_info');
