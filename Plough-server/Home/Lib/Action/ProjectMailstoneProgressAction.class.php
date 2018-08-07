@@ -94,7 +94,7 @@ class ProjectMailstoneProgressAction extends Action
      */
     public function deleteMailStone($id){
         $mailstone = M('project_mailstone_progress');
-        if($mailstone->where('relatedId='.$id)->delete()){
+        if($mailstone->where('id='.$id)->delete()){
             $projects = M('projects');
             $projectName = $projects->where('id=' . $id)->field('projectName')->select();
             $logs = M('logs_info');
