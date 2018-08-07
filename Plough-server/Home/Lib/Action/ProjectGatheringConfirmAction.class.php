@@ -102,7 +102,7 @@ class ProjectGatheringConfirmAction extends Action
     public function deleteGatheringConfirm($id)
     {
         $gathering = M('project_gathering_confirm');
-        if ($gathering->where('relatedId=' . $id)->delete()) {
+        if ($gathering->where('id=' . $id)->delete()) {
             $projects = M('projects');
             $projectName = $projects->where('id=' . $id)->field('projectName')->select();
             $logs = M('logs_info');
