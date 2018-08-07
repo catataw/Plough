@@ -16,7 +16,7 @@ class ProjectStatusAction extends Action {
         //header("Content-type:text/html;charset=utf-8");//让网页可以显示中文
         $_rexp = array (
             'relatedId'=>'/^[0-9]+$/',//正则表达式
-            'commerceStatus'=>'/^商机中|已立项|已谈判|已签约|已关闭$/',
+            'commerceStatus'=>'/^商机中|已立项|已谈判|已签约|已结项$/',
             'implementBases'=>'/^无|POC|合同|POC+合同$/',
             'developStatus'=>'/^未开发|开发中|已完成$/',
             'operateStatus'=>'/^未交维|自运维|已交维$/',
@@ -69,7 +69,7 @@ class ProjectStatusAction extends Action {
     public function editStatus(){
         $_rexp = array (
             'id'=>'/^[0-9]+$/',
-            'commerceStatus'=>'/^(商机中|已立项|已谈判|已签约|已关闭)?$/',
+            'commerceStatus'=>'/^(商机中|已立项|已谈判|已签约|已结项)?$/',
             'implementBases'=>'/^(无|POC|合同|POC+合同)?$/',
             'developStatus'=>'/^(未开发|开发中|已完成)?$/',
             'operateStatus'=>'/^(未交维|自运维|已交维)?$/',
