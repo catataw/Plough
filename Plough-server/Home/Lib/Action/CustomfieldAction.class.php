@@ -12,10 +12,12 @@ class CustomfieldAction extends Action
     public function addCustomField(){
         $postData = file_get_contents ( "php://input" );
         $data = json_decode ( htmlspecialchars_decode ( $postData ), TRUE );
-        $fields = M("projects")->getDbFields();
+        $project_fields = M("projects")->getDbFields();
+        $process_fields = M("project_process")->getDbFields();
+        $allFields = array_merge($project_fields,$process_fields);
         $tempFields = explode(',',$data['customField']);
         foreach ($tempFields as $value){
-            if(!in_array($value,$fields)){
+            if(!in_array($value,$allFields)){
                 $this->ajaxReturn(array(),'失败，请重新确认所给字段',0);
             }
         }
@@ -44,10 +46,12 @@ class CustomfieldAction extends Action
     public function editCustomField(){
         $postData = file_get_contents ( "php://input" );
         $data = json_decode ( htmlspecialchars_decode ( $postData ), TRUE );
-        $fields = M("projects")->getDbFields();
+        $project_fields = M("projects")->getDbFields();
+        $process_fields = M("project_process")->getDbFields();
+        $allFields = array_merge($project_fields,$process_fields);
         $tempFields = explode(',',$data['customField']);
         foreach ($tempFields as $value){
-            if(!in_array($value,$fields)){
+            if(!in_array($value,$allFields)){
                 $this->ajaxReturn(array(),'失败，请重新确认所给字段',0);
             }
         }
@@ -78,10 +82,12 @@ class CustomfieldAction extends Action
         header("Access-Control-Allow-Headers:content-type");
         $postData = file_get_contents ( "php://input" );
         $data = json_decode ( htmlspecialchars_decode ( $postData ), TRUE );
-        $fields = M("projects")->getDbFields();
+        $project_fields = M("projects")->getDbFields();
+        $process_fields = M("project_process")->getDbFields();
+        $allFields = array_merge($project_fields,$process_fields);
         $tempFields = explode(',',$data['customField']);
         foreach ($tempFields as $value){
-            if(!in_array($value,$fields)){
+            if(!in_array($value,$allFields)){
                 $this->ajaxReturn(array(),'失败，请重新确认所给字段',0);
             }
         }
