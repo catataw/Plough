@@ -67,7 +67,7 @@ class ProjectProcessAction extends Action
             $en = date ( "Y-m-d", strtotime ( "$st  +6  days " ) );
             $start = substr(str_replace('-','.',$st),5,8);
             $end = substr(str_replace('-','.',$en),5,8);
-            $data[$key]['updateTime'] = $start.'-'.$end;
+            $data[$key]['dateRange'] = $start.'-'.$end;
         }
         if($data !== false){
             $this->ajaxReturn($data,'获取成功', 1);
