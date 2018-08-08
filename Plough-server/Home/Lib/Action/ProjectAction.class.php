@@ -70,7 +70,6 @@ class ProjectAction extends Action {
 		}
 	}
 
-
 	/**
 	 * 添加关注
 	 */
@@ -251,7 +250,7 @@ class ProjectAction extends Action {
 			}
 
 			$v['nodeCount'] = $v['nodeCount']?$v['nodeCount']:"0";
-			$v['productTypeCount'] = $productTypeCount?$productTypeCount:"0";;
+			$v['productTypeCount'] = $productTypeCount?$productTypeCount:"0";
 			$v['startTime']=$v['startTime']?substr($v['startTime'],0,10):'';
 			$v['planFinishedTime']=$v['planFinishedTime']?substr($v['planFinishedTime'],0,10):'';
 			$v['signContractTime']=$v['signContractTime']?substr($v['signContractTime'],0,10):'';
@@ -264,7 +263,6 @@ class ProjectAction extends Action {
 		}else{
 			$this->ajaxReturn(array(),'获取列表失败', 0);
 		}
-
 	}
 	
 
@@ -333,6 +331,34 @@ class ProjectAction extends Action {
 		$postData = file_get_contents ( "php://input" );
 		$data = json_decode ( htmlspecialchars_decode ( $postData ), TRUE );
 		if($data ['id'] != ''){
+			//项目进展数据获取
+			$where['relatedId'] = $data ['id'];
+			$oneProjectProcess =  M('project_process')
+				->where($where)
+				->order('id desc')
+				->limit(2)
+				->select();
+			$arrProcess=array('process','risk','lastWeekProgress','recentPlan','responseMeasures');
+			//上周进展
+			foreach ($arrProcess as $key=>$value){
+				$lastProcess[$value] = $data[$value];
+			}
+			//本周进展
+			$currentProgress['currentProgress'] = $data['currentProgress'];
+			//编辑上周进展
+			if($lastProcess['lastWeekProgress']){
+				$lastProcess['currentProgress'] = $lastProcess['lastWeekProgress'];
+				unset($lastProcess['lastWeekProgress']);
+				M('project_process')
+					->where('id='.$oneProjectProcess[1]['id'])
+					->save($lastProcess);
+			}
+			//编辑上周进展
+			if($currentProgress['currentProgress']){
+				M('project_process')
+					->where('id='.$oneProjectProcess[0]['id'])
+					->save($currentProgress);
+			}
 
 			$projects = M ( 'projects' );
 			$result = $projects->where ( 'id=' . $data ['id'] )->save ( $data );
@@ -346,6 +372,7 @@ class ProjectAction extends Action {
 						$this->ajaxReturn(array(),'修改失败',0);
 				}
 			}
+
 		}
 	}
 	
