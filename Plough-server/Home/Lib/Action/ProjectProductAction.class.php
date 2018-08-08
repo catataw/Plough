@@ -3,7 +3,7 @@
 class ProjectProductAction extends Action {
 	
 	/**
-	 * 获取项目信息
+	 * 获取项目节点信息
 	 */
 	public function getProjectProducts() {
 		$postData = file_get_contents ( "php://input" );

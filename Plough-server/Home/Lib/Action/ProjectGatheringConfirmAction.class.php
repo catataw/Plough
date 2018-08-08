@@ -8,16 +8,17 @@
  */
 class ProjectGatheringConfirmAction extends Action
 {
-    //添加项目收入确认
-    public function addGatheringConfirm()
-    {
-        $_rexp = array(
-            'relatedId' => '/^[0-9]+$/',  //^[0-9]+$由0到9中任何数据组成的字符串
-            'confirmProgressTime' => '/^[1-9]\d{3}-(0[1-9]|1[0-2])-(0[1-9]|[1-2][0-9]|3[0-1])$/',
-            'confirmTax' => '/^[1-9]{1}\d*(\.\d{1,2})?$/',
-            'confirmNoTax' => '/^[1-9]{1}\d*(\.\d{1,2})?$/',
-            'confirmedProgress' => '/^100$|^(\d|[1-9]\d)$/', //100 0~9 10~99
-            'textRate' => '/^100$|^(\d|[1-9]\d)$/'
+    /**
+     * 添加项目收入确认
+     */
+    public function addGatheringConfirm(){
+        $_rexp = array (
+            'relatedId'=>'/^[0-9]+$/',
+            'confirmProgressTime'=>'/^[1-9]\d{3}-(0[1-9]|1[0-2])-(0[1-9]|[1-2][0-9]|3[0-1])$/',
+            'confirmTax'=>'/^[1-9]{1}\d*(\.\d{1,2})?$/',
+            'confirmNoTax'=>'/^[1-9]{1}\d*(\.\d{1,2})?$/',
+            'confirmedProgress'=>'/^100$|^(\d|[1-9]\d)$/',
+            'textRate'=>'/^100$|^(\d|[1-9]\d)$/'
         );
         $postData = file_get_contents("php://input");
         $data = json_decode(htmlspecialchars_decode($postData), TRUE);

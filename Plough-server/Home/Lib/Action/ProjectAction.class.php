@@ -72,126 +72,197 @@ class ProjectAction extends Action {
 
 
 	/**
-	 *	获取方案组项目信息
+	 * 添加关注
 	 */
-	public function getAllSolProject() {
-		$jobtime = M("job_time");
-		$userType = session('userType');
-		$userTeam = session('userTeam');
-		$userName = session('userName');
-		$lastDaty = date('Y-m-t', strtotime('-1 month'));
-		$firstDay = date('Y-m-01', strtotime('-1 month'));
-		//$data = M ( 'projects' )->select();
-		if(session('userEmail')!='zhangyujing@wx.bigcloudsys.com'&&session('userEmail')!='luoying321@139.com'){
-			if($userType==3||$userType==2||$userType==5||$userName=='赵欣'){
-				$data = M ( 'projects' )
-						->where('risk !=""')
-						->select();
-
+	public function addConcernPeople(){
+		$postData = file_get_contents ( "php://input" );
+		$data = json_decode ( htmlspecialchars_decode ( $postData ), TRUE );
+		$userEmail = $data['userEmail'];
+		
+		if($data['userEmail']&&$data['id']){
+			$where['id'] = $data['id'];
+			$Project = M( 'projects' )
+			                 ->where($where)
+			                 ->select();
+			
+			if($Project){
+				$concernPeople['concernPeople']= str_replace($userEmail.",",'',$Project[0]['concernPeople']).$userEmail.",";
+				$concernPeople['id'] = $data['id'];
+				
+				if(M( 'projects' )->where($where)->save($concernPeople)){
+					$this->ajaxReturn(array(),'关注成功',1);
+				}else{
+					$this->ajaxReturn(array(),'关注失败',0);
+				}
+				
 			}else{
-				$data = M ( 'projects' )
-						->where('risk !="" and projectManagerId="'.$userName.'"')
-						->select();
+					$this->ajaxReturn(array(),'项目编号错误',2);
+				}
+		}
+
+	}
+	
+	/*
+	 * 取消关注
+	 * 
+	 */
+	public function cancelConcernPeople(){
+		$postData = file_get_contents ( "php://input" );
+		$data = json_decode ( htmlspecialchars_decode ( $postData ), TRUE );
+		$userEmail = $data['userEmail'];
+		if($data['userEmail']&&$data['id']){
+			$where['id'] = $data['id'];
+			$Project = M( 'projects' )
+			->where($where)
+			->select();
+				
+			if($Project){
+				$concernPeople['concernPeople']= str_replace($userEmail.',','',$Project[0]['concernPeople']);
+				$concernPeople['id'] = $data['id'];
+		
+				if(M( 'projects' )->where($where)->save($concernPeople)){
+					$this->ajaxReturn(array(),'取关成功',1);
+				}else{
+					$this->ajaxReturn(array(),'取关失败',0);
+				}
+		
+			}else{
+				$this->ajaxReturn(array(),'项目编号错误',2);
 			}
 		}
 		
-		$maxMoney = M ( 'projects' )->max('projectPrice');
+	}
+	
+	
 
-		if($data){
-			//获取与调度项目列表并关联并获取项目最新进展
-			foreach($data as $key=>$value){
-				$where['relatedId'] = $value['id'];
-				$oneProjectProcess =  M('project_process')
-				->where($where)
-				->order('id desc')
-				->limit(1)
-				->select();
-					
-					
-				//若为 调度项目 才继续关联 其他字段
-				if($oneProjectProcess){
-					//算金额得分
-					$value['moneyScore'] = round($value['projectPrice']/$maxMoney*40,2);
-					if($value['strategiSignificance']&&$value['productMatch']){
-						$value['totalScore'] = $value['moneyScore'] + $value['strategiSignificance'] +$value['productMatch'];
-					}else{
-						$value['totalScore'] = '';
-					}
-					//关联项目状态
-					$oneProjectStatus = M('project_status')
-					->where($where)
-					->order('id desc')
-					->limit(1)
+	/**
+	 *	获取方案组项目信息
+	 */
+	public function getAllSolProject() {
+		$userType = session('userType');
+		$userTeam = session('userTeam');
+		$userName = session('userName');
+		$userEmail = session('userEmail');
+		
+		//判断是否有自定义
+		$whereF['userEmail'] = $userEmail;
+        $customFeild = M('project_custom_field')
+                       ->where($whereF)
+                       ->select(); 
+        if($customFeild){
+        	$fieldSql = $customFeild[0]['customField'].',id';
+        }
+
+        $fieldSql?$fieldArr = explode(',',$fieldSql):null;
+        //过滤出上周进展字段
+        $arrProcess=array('process','risk','lastWeekProgress','recentPlan','responseMeasures');
+        
+        if($fieldArr){
+        	foreach ($arrProcess as $value){
+        		$key = array_search($value,$fieldArr);
+        		if($key>=0&&$fieldArr[$key]){
+        			$processFieldArr[] = $fieldArr[$key];
+        			unset($fieldArr[$key]);
+        		}
+        		$currentKey = array_search('currentProgress',$fieldArr);
+        		if($currentKey>=0&&$fieldArr[$currentKey]){
+        			$currentField[0] = $fieldArr[$currentKey];
+        			unset($fieldArr[$currentKey]);
+        		}
+        	}
+        }else{
+        	$processFieldArr = $arrProcess;
+        	$currentField[0] = 'currentProgress';
+        }
+
+        //主表自定义字段
+        $projectField = implode(',',$fieldArr);
+
+        //获取主表数据
+		/*
+		if(session('userEmail')!='zhangyujing@wx.bigcloudsys.com'&&session('userEmail')!='luoying321@139.com'){
+			if($userType==3||$userType==2||$userType==5||$userName=='赵欣'){
+				if($projectField){
+					$data = M ( 'projects' )
+					->field($projectField)
+					->where('risk !=""')
 					->select();
-			
-					$whereM['relatedId'] = $value['id'];
-					$whereM['status'] = '进行中';
-			
-					//关联项目里程碑
-					$oneMailstoneProgress = M('project_mailstone_progress')
-					->where($whereM)
-					->order('id desc')
-					->limit(1)
-					->select();
-			
-					if(!$oneMailstoneProgress){
-						$oneMailstoneProgress[0]['mailstoneName'] = '';
-						$oneMailstoneProgress[0]['planFinishedTime'] = '';
-						$oneMailstoneProgress[0]['isOverdue'] = '';
-					}else{
-						if($oneMailstoneProgress[0]['planFinishedTime']>date('Y-m-t')){
-							$oneMailstoneProgress[0]['isOverdue'] = '是';
-						}else{
-							$oneMailstoneProgress[0]['isOverdue'] = '否';
-						}
-					}
-			
-					//关联收入
-					$oneProjectGatheringConfirm = M('project_gathering_confirm')
-					->where($where)
-					->order('id desc')
-					->limit(1)
-					->select();
-						
-					if(!$oneProjectGatheringConfirm){
-						$oneProjectGatheringConfirm[0]['confirmedProgress'] = '';
-					}
-					//获取项目上月投入工时
-					/*
-					unset($lastMonthWorkTime);
-					$lastMonthWorkTime['lastMonthWorkTime'] = $jobtime->where("projectId='{$value['projectId']}' and date<='{$lastDaty}' and date=>'{$firstDay}'")->sum("workTime");
-					if(!$lastMonthWorkTime){
-						$lastMonthWorkTime['lastMonthWorkTime'] = 0;
-					}
-					//获取项目投入工时
-					 unset($totalWorkTime);
-					$whereLW['projectId'] = $value['projectId'];
-					$totalWorkTime['totalWorkTime'] = $jobtime->where($whereLW)->sum("workTime");
-					if(!$totalWorkTime){
-					$totalWorkTime['totalWorkTime'] = 0;
-					}
-					*/
-					$lastMonthWorkTime['lastMonthWorkTime'] = '';
-					$totalWorkTime['totalWorkTime'] = '';
-			
-					//关联产品种类数
-					$productTypeCount = M("project_product")->where($where)->Count();
-					$value['nodeCount'] = $value['nodeCount']?$value['nodeCount']:"0";
-					$value['productTypeCount'] = $productTypeCount?$productTypeCount:"0";;
-					$oneProject = array_merge($value,$oneProjectProcess[0]?$oneProjectProcess[0]:array(),$oneProjectStatus[0]?$oneProjectStatus[0]:array(),$oneMailstoneProgress[0]?$oneMailstoneProgress[0]:array(),$oneProjectGatheringConfirm[0]?$oneProjectGatheringConfirm[0]:array());
-					$oneProject['id'] = $value['id'];					
-					if($oneProject){
-						$result[] = $oneProject;
-					}
 				}else{
-					$result[] = $value;
+					$data = M ( 'projects' )
+					->where('risk !=""')
+					->select();
 				}
-				unset($value);
-			
+			}else{
+				if($projectField){
+					$data = M ( 'projects' )
+						->field($projectField)
+						->where('risk !="" and projectManagerId="'.$userName.'"')
+						->select();
+				}else{
+					$data = M ( 'projects' )
+						->where('risk !="" and projectManagerId="'.$userName.'"')
+						->select();
+				}
 			}
-			//将项目状态数据同步
-			echo json_encode ( $result );
-			exit ();
+		}*/
+        if($projectField){
+        	$data = M ('projects' )
+        	->field($projectField)
+        	->where('risk !=""')
+        	->select();
+        }else{
+        	$data = M ('projects' )
+        	->where('risk !=""')
+        	->select();
+        }
+
+
+		foreach($data as $v){
+			$where['relatedId'] = $value['id'];
+			$oneProjectProcess =  M('project_process')
+					->where($where)
+					->order('id desc')
+					->limit(2)
+					->select();
+
+			if($processFieldArr){
+                foreach ($processFieldArr as $key=>$value){
+                	$lastProcess[$value] = $oneProjectProcess[1][$value];
+                }
+                if(in_array('lastWeekProgress',lastWeekProgress)){
+                	$lastProcess['lastWeekProgress'] = $oneProjectProcess[1]['lastWeekProgress'];
+                }
+			}
+			if($currentField){
+				$currentProgress['currentProgress'] =$oneProjectProcess[0]['currentProgress'];
+			}
+			
+
+			$productTypeCount = M("project_product")->where($where)->Count();
+			
+			if($v['planFinishedTime']){
+				if($v['planFinishedTime']>date('Y-m-t')){
+					$v['isOverdue'] = '是';
+				}else{
+					$v['isOverdue'] = '否';
+				}
+			}else{
+				$v['isOverdue'] = '';
+			}
+
+			$v['nodeCount'] = $v['nodeCount']?$v['nodeCount']:"0";
+			$v['productTypeCount'] = $productTypeCount?$productTypeCount:"0";;
+			$v['startTime']=$v['startTime']?substr($v['startTime'],0,10):'';
+			$v['planFinishedTime']=$v['planFinishedTime']?substr($v['planFinishedTime'],0,10):'';
+			$v['signContractTime']=$v['signContractTime']?substr($v['signContractTime'],0,10):'';
+			$v['onlineTime']=$v['onlineTime']?substr($v['onlineTime'],0,10):'';
+			$result[] = array_merge($v,$currentProgress?$currentProgress:array(),$lastProcess?$lastProcess:array());
+		}
+
+		if($result){
+			$this->ajaxReturn($result,'获取列表成功', 1);
+		}else{
+			$this->ajaxReturn(array(),'获取列表失败', 0);
 		}
 
 	}
@@ -269,8 +340,11 @@ class ProjectAction extends Action {
 				$logs = M ( 'logs_info' );
 				$logsData ['logDetail'] = date ( 'Y-m-d H:i:s' ) . ':' . session ( 'userName' ) . '修改项目(' . $data ['projectId'].")";
 				$logs->add ( $logsData );
-				echo 200;
-				exit ();
+				if($result){
+						$this->ajaxReturn(array(),'修改成功',1);
+					}else{
+						$this->ajaxReturn(array(),'修改失败',0);
+				}
 			}
 		}
 	}
@@ -1042,9 +1116,6 @@ class ProjectAction extends Action {
 	}
 	
 	
-	/*
-	 * 导出未更新的项目
-	 */
 	/*
 	 * 导出未更新的项目
 	 */
