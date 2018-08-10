@@ -57,6 +57,18 @@ class ProjectProcessAction extends Action
 //            $process->add($row);
 //        }
         $data = $process->where('relatedId='.$id)->order('updateTime desc')->select();
+        foreach($data as $key => $value)
+        {
+            $gdate = substr($data[$key]['updateTime'],0,10);
+            $weekStart = 1;
+            $w = date ( "w", strtotime ( $gdate ) ); //取得一周的第几天,星期天开始0-6
+            $dn = $w ? $w - $weekStart : 6; //要减去的天数
+            $st = date ( "Y-m-d", strtotime ( "$gdate  - " . $dn . "  days " ) );
+            $en = date ( "Y-m-d", strtotime ( "$st  +6  days " ) );
+            $start = substr(str_replace('-','.',$st),5,8);
+            $end = substr(str_replace('-','.',$en),5,8);
+            $data[$key]['dateRange'] = $start.'-'.$end;
+        }
         if($data !== false){
             $this->ajaxReturn($data,'获取成功', 1);
         }else{
