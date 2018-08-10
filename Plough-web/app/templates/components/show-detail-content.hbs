@@ -1,0 +1,33 @@
+<div id="table-content{{mockId}}">
+      <table>
+        <tr>
+          <td>进度：</td>
+          <td>
+            <div>
+              <span>{{progressInfo.process}}%</span>
+             
+              <progress width='100%' value ={{progressInfo.process}} max="100"></progress>
+            </div>
+          </td>
+        </tr>
+        <tr>
+          <td>风险度：</td>
+          <td>{{progressInfo.risk}}</td>
+        </tr>
+        <tr>
+          <td>风险及应对措施：</td>
+          <td>{{progressInfo.responseMeasures}}</td>
+        </tr>
+        <tr>
+          <td>当前进展：</td>
+          <td>{{progressInfo.currentProgress}}</td>
+        </tr>
+        <tr>
+          <td>近期计划：</td>
+          <td>{{progressInfo.recentPlan}}</td>
+        </tr>
+      </table>
+    </div>
+   
+
+  

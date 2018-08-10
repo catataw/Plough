@@ -1,0 +1,37 @@
+<div class="info-content">
+
+  {{!-- 第一行 --}}
+  <div class="inline {{if addItem "additem" "top"}}">
+    {{!-- 时间 --}}
+    <div class="time modify-time">
+      {{#if addItem}} 
+        {{bfs-datepicker class="timeStyle" Value=currentDate}}
+        <img src=".{{rootUrl}}/imgs/icon_time.png" alt="日历">
+        <span>注：请选择状态实际发生的时间</span>
+      {{/if}}
+    </div>
+    {{!-- 球 --}}
+    <div>
+      <img src=".{{rootUrl}}/imgs/icon_hollow_circle{{if addItem "_long"}}.svg" alt="空心球">
+    </div>
+
+    {{#if addItem}}
+    {{!-- 填写的表格 --}}
+    {{form-select status=newStatus}}
+    <div style="text-align:right"><a href="javascript:void(0)"><span {{action "confirmAddNew"}}>确定</span></a></div>
+    <div style="text-align:right"><a href="javascript:void(0)"><span {{action "cancelAddNew"}}>取消</span></a></div>
+    {{else}}
+    {{!-- 添加按钮 --}}
+    <div class="add" {{action "addNew"}}>
+      <a href="">+添加状态</a>
+    </div>
+    {{/if}}
+  </div>
+
+  {{!-- 1 --}}
+  {{#each _statusList as |status index|}} 
+  {{!-- 展示状态信息列表或者添加状态 --}}
+  {{list-info-additem statusList0=_statusList status=status index=index toConfirmModify='confirmModify' toCancleMOdify='cancleMOdify'}}
+  {{/each}}
+  </div>
+{{!-- <div  style = "width:1173px; height: 215px;" id = "history-status"></div> --}}

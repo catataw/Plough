@@ -1,0 +1,85 @@
+<div class="employee-p">
+  <div>
+    <p class="page-header pmo-header title-p">外协管理-外协概况</p>
+  </div>
+</div>
+
+<div class="report"  id="report-detail">
+  <h3>{{t 'dashbord.operate'}}:</h3>
+  <div class="row report-header">
+    <div class="col-lg-2 col-md-2">
+      {{date-picker date=dsahboardTime valueFormat='YYYY-MM-DD' class="form-control"}}
+    </div>
+    <div class="col-lg-2 col-md-2">
+      <li title="导入外协考勤" class="icon-add glyphicon glyphicon-plus" {{action 'addAttendance'}}></li>
+    </div>
+  </div>
+
+  <h3>{{t 'check.summary'}}:</h3>
+  <row>
+    <div class="col-lg-12 col-md-12 report-error-info">
+      <p class="col-lg-2 col-md-2">总物理机数:<span class="warning-word">{{survey.totalComputerCount}} </span></p>
+      <p class="col-lg-2 col-md-2">剩余物理机总数:<span class="warning-word">{{survey.leftComputerCount}}</span></p>
+      <p class="col-lg-2 col-md-2">长期用机总数:<span class="warning-word">{{survey.longComputerCount}}</span></p>
+      <p class="col-lg-2 col-md-2">临时用机总数:<span class="warning-word">{{survey.tmpComputerCount}}</span></p>
+      <p class="col-lg-2 col-md-2">近月可回收机器数:<span class="warning-word">{{survey.backInMonthCount}}</span></p>
+    </div>
+  </row>
+  <div class="clear"></div>
+  <h3>物理机分布图</h3>
+  <row>
+    <div class="col-lg-12 col-md-12 dashboard-widget" data="mydata">
+      {{team-used-machine}}
+    </div>
+
+    <div class="two-widget dashboard-widget">
+      {{department-used-machine}}
+    </div>
+
+    <div class="two-widget dashboard-widget margin6">
+      {{apply-machine}}
+    </div>
+
+  </row>
+  <div class="clear"></div>
+</div>
+
+{{#pmo-modal modalId ="addSomeAttendanceForm" errorInfo=errorInfo hEvent='submitExclData'}}
+  <div class="modal-header" >
+    <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+    <h4 class="modal-title">批量导入机器</h4>
+  </div>
+  <h5 class=" warning-word col-lg-12 col-md-12">注意：导入的excl格式如下所示，且导入的是第一张sheet的内容。</h5>
+  <div class="modal-body">
+    <div class="row">
+      <div class="col-lg-12 col-md-12">
+        <table class="table-striped table-bordered table-health-report">
+          <thead>
+          <tr>
+            <th>日期</th>
+            <th>工号</th>
+            <th>姓名</th>
+            <th>开始时间</th>
+            <th>结束时间</th>
+          </tr>
+          </thead>
+          <tbody>
+          <tr>
+            <td>2017/8/14</td>
+            <td>002</td>
+            <td>曹艳</td>
+            <td>08:57</td>
+            <td>18:21</td>
+          </tr>
+          </tbody>
+        </table>
+
+      </div>
+    </div>
+    <div class="row" >
+      <div class="col-lg-12">
+        {{file-upload url="?m=Employee&a=inportAtendance" class="input-file"}}
+      </div>
+    </div>
+  </div>
+{{/pmo-modal}}

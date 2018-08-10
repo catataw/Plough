@@ -1,0 +1,11 @@
+{{#if isSuper}}
+  <button class="btn btn-health-report btn-report-success">超级用户</button>
+{{else if isAdmin}}
+  <button class="btn btn-health-report btn-report-danger">管理员用户</button>
+{{else if isOrigin}}
+  <button class="btn btn-health-report btn-report-warning">普通用户</button>
+{{else if isTeamLeader}}
+  <button class="btn btn-health-report btn-report-warning">组长</button>
+{{else if isBigTeamLeader}}
+  <button class="btn btn-health-report btn-report-warning">大组长</button>
+{{/if}}

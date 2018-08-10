@@ -1,0 +1,61 @@
+<div class="row">
+  <div class="monitor-header">
+    <p class="title-p col-md-3 col-lg-3 no-padding">物理机管理-资源利用率监控</p>
+      <div class="col-md-4 col-lg-4">
+        <div class="form-group input-group">
+          {{input value=searchWordInput placeholder='请按IP,使用人等模糊搜索' key-up="searchedItemFromWord"  class="search-input form-control"}}
+          <span class="input-group-btn">
+          <button class="btn btn-default" type="button"><i class="glyphicon glyphicon-search"></i>
+          </button>
+          </span>
+        </div>
+      </div>
+      <a class="col-left-curor col-lg-2" href="index.php/Computermonitor/getMonitorExcl?type=mem" title="导出最近15天内存峰值利用率"><span class="badge badge-success">导出最近15天内存峰值利用率</span></a>
+      <a  class="col-left-curor col-lg-2" href="index.php/Computermonitor/getMonitorExcl?type=cpu" title="导出最近15天cpu峰值利用率"><span class="badge badge-success">导出最近15天cpu峰值利用率</span></a>
+      <div class="clear"></div>
+  </div>
+</div>
+<div class="clear"></div>
+
+<div class="report"  id="report-detail">
+  {{#each showData as |treeValue|}}
+    <row>
+      <div class="two-widget dashboard-widget">
+       {{computer-cpu-monitor computerInfo=treeValue}}
+      </div>
+      <div class="book-icon">
+        <div class="circle">
+          {{treeValue.userName}}
+        </div>
+        <div class="circle">
+          <span class="min-ip">{{treeValue.ip}}</span>
+        </div>
+      </div>
+
+      <div class="two-widget dashboard-widget">
+        {{computer-memory-monitor computerInfo=treeValue}}
+      </div>
+    </row>
+    <div class="clear"></div>
+  {{/each}}
+  <div class="page-bar">
+    <div class="filtered-info span4">
+      <label>当前为第{{currentPage}}页<a href="#"></a></label>
+    </div>
+    <div class="selected-hosts-info span4"></div>
+    <div class="items-on-page">
+      <label>{{t 'common.show'}}:
+        <select id="list-status" class="form-control-2" name="pagesize" onchange={{action "refreshPageSize"}}>
+          <option value="10">10</option>
+          <option value="50">50</option>
+          <option value="100">100</option>
+        </select>
+      </label>
+    </div>
+    <div class="info">{{beginShowItem}}-{{endShowItem}} of {{searchItemLength}}</div>
+    <div class="paging_two_button">
+      <a class='paginate_previous' {{action 'pageDown'}} ><i class="glyphicon glyphicon-arrow-left" ></i></a>
+      <a class='paginate_next' {{action 'pageUp'}}><i class="glyphicon glyphicon-arrow-right"></i></a>
+    </div>
+  </div>
+</div>

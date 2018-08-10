@@ -1,0 +1,484 @@
+{{project-mana-list-filter filterLists=filterLists}}
+<div>
+    {{project-mana-tab-set SetShowRange='setShowRange' activeTab=_showRange}}
+</div>
+<div class="fixed-table-box row-col-fixed">
+    {{!-- 表头 --}}
+    <div class="fixed-table_header-wraper" style="margin-right:17px">
+        <table class="fixed-table_header" cellspacing="0" cellpadding="0" border="0">
+            <thead>
+                <tr>
+                    <th data-fixed="true">
+                        <div class="table-cell w-6">项目通称</div>
+                    </th>
+                    <th>
+                        <div class="table-cell w-first">商机编号/项目编号</div>
+                    </th>
+                    <th>
+                        <div class="table-cell w-1">合同编号</div>
+                    </th>
+                    <th>
+                        <div class="table-cell w-2 project-mana-title-header">合同签订时间
+                            <div class = "sort-arrow" {{action "sorting" "signContractTime"}}></div>
+                            <div>{{project-mana-date-picker Choosing='choosing' _Id = "sign-contractTime"}}</div>
+                        </div>
+                    </th>
+                    <th>
+                        <div class="table-cell w-3 project-mana-title-header">采购方式
+                            <div>{{project-mana-filter-select Choosing='choosing'}}</div>
+                        </div>
+                    </th>
+                    <th>
+                        <div class="table-cell w-4 project-mana-title-header">工期要求
+                            <div class = "sort-arrow" {{action "sorting" "onlineTime"}}></div>
+                            <div>{{project-mana-date-picker Choosing='choosing' _Id = "online-time"}}</div>
+                        </div>
+                    </th>
+                    <th>
+                        <div class="table-cell w-5">项目名称</div>
+                    </th>
+                    <th>
+                        <div class="table-cell w-7 project-mana-title-header">项目类型
+                            <div>{{project-mana-filter-select Choosing='choosing' Lists = _projectTypes}}</div>
+                        </div>
+                    </th>
+                    <th>
+                        <div class="table-cell w-8 project-mana-title-header">项目启动会时间
+                            <div class = "sort-arrow" {{action "sorting" "startTime"}}></div>
+                            <div>{{project-mana-date-picker Choosing='choosing' _Id = "start-time"}}</div>
+                        </div>
+                    </th>
+                    <th>
+                        <div class="table-cell w-9 project-mana-title-header">项目金额(元)
+                            <div class = "sort-arrow" {{action "sorting" "projectPrice"}}></div>
+                        </div>
+                    </th>
+                    <th>
+                        <div class="table-cell w-36 project-mana-title-header">项目级别
+                            <div>{{project-mana-filter-select Choosing='choosing' Lists = _projectLevel}}</div>
+                        </div>
+                    </th>
+                    <th>
+                        <div class="table-cell w-37 project-mana-title-header">项目分类
+                            <div>{{project-mana-filter-select Choosing='choosing' Lists = _projectClassify}}</div>
+                        </div>
+                    </th>
+                    <th>
+                        <div class="table-cell w-52">产品节点</div>
+                    </th>
+                    <th>
+                        <div class="table-cell w-11">公司名称（客户）</div>
+                    </th>
+                    <th>
+                        <div class="table-cell w-12">部门名称（客户）</div>
+                    </th>
+                    <th>
+                        <div class="table-cell w-13">二级经理（客户）</div>
+                    </th>
+                    <th>
+                        <div class="table-cell w-14">三级经理（客户）</div>
+                    </th>
+                    <th>
+                        <div class="table-cell w-15">员工(客户)</div>
+                    </th>
+                    <th>
+                        <div class="table-cell w-16">主要联系人(客户)</div>
+                    </th>
+                    <th>
+                        <div class="table-cell w-41 project-mana-title-header" style="padding-left:9.5rem">涉及小组
+                            <div>{{project-mana-filter-select Choosing='choosing' Lists = _filterByTeam}}</div>
+                        </div>
+                    </th>
+                    <th>
+                        <div class="table-cell w-17 project-mana-title-header">涉及区域
+                            <div>{{project-mana-filter-select Choosing='choosing' Lists = _stricts}}</div>
+                        </div>
+                    </th>
+                    <th>
+                        <div class="table-cell w-18">销售经理</div>
+                    </th>
+                    <th>
+                        <div class="table-cell w-40">区域大项目经理</div>
+                    </th>
+                    <th>
+                        <div class="table-cell w-19">区域解决方案经理</div>
+                    </th>
+                    <th>
+                        <div class="table-cell w-20">产品部项目经理</div>
+                    </th>
+                    <th>
+                        <div class="table-cell w-21">实施经理</div>
+                    </th>
+                    <th>
+                        <div class="table-cell w-22">研发经理</div>
+                    </th>
+                    <th>
+                        <div class="table-cell w-23">测试经理</div>
+                    </th>
+                    <th>
+                        <div class="table-cell w-24">服务经理</div>
+                    </th>
+                    <th>
+                        <div class="table-cell w-25 project-mana-title-header">商务状态
+                            <div>{{project-mana-filter-select Choosing='choosing' Lists = _businessTypes}}</div>
+                        </div>
+                    </th>
+                    <th>
+                        <div class="table-cell w-26 project-mana-title-header">实施依据
+                            <div>{{project-mana-filter-select Choosing='choosing' Lists = _implementBases}}</div>
+                        </div>
+                    </th>
+                    <th>
+                        <div class="table-cell w-27 project-mana-title-header">实施状态
+                            <div>{{project-mana-filter-select Choosing='choosing' Lists = _developStatus}}</div>
+                        </div>
+                    </th>
+                    <th>
+                        <div class="table-cell w-28 project-mana-title-header">研发状态
+                            <div>{{project-mana-filter-select Choosing='choosing' Lists = _developStatus}}</div>
+                        </div>
+                    </th>
+                    <th>
+                        <div class="table-cell w-29 project-mana-title-header">上线状态
+                            <div>{{project-mana-filter-select Choosing='choosing' Lists = _onlineStatus}}</div>
+                        </div>
+                    </th>
+                    <th>
+                        <div class="table-cell w-30 project-mana-title-header">交维状态
+                            <div>{{project-mana-filter-select Choosing='choosing' Lists = _operateStatus}}</div>
+                        </div>
+                    </th>
+                    <th>
+                        <div class="table-cell w-31">当前进展</div>
+                    </th>
+                    <th>
+                        <div class="table-cell w-32">近期计划</div>
+                    </th>
+                    <th>
+                        <div class="table-cell w-33 project-mana-title-header">进度(%) 0~100
+                            <div class = "sort-arrow" {{action "sorting" "process"}}></div>
+                        </div>
+                    </th>
+                    <th>
+                        <div class="table-cell w-34 project-mana-title-header">当前风险度
+                            <div>{{project-mana-filter-select Choosing='choosing' Lists = _risk}}</div>
+                        </div>
+                    </th>
+                    <th>
+                        <div class="table-cell w-35">当前风险及应对措施</div>
+                    </th>
+                    
+                    {{!-- <th>
+                        <div class="table-cell w-38">主要联系人(客户)</div>
+                    </th> --}}
+                    {{!-- <th>
+                        <div class="table-cell w-42 project-mana-title-header">上月工时投入
+                            <div class = "sort-arrow" {{action "sorting" "lastMonthWorkTime"}}></div>
+                        </div>
+                    </th>
+                    <th>
+                        <div class="table-cell w-43 project-mana-title-header">总工时投入
+                            <div class = "sort-arrow" {{action "sorting" "totalWorkTime"}}></div>
+                        </div>
+                    </th> --}}
+                    <th>
+                        <div class="table-cell w-44">下一里程碑</div>
+                    </th>
+                    <th>
+                        <div class="table-cell w-45">计划完成时间</div>
+                    </th>
+                    <th>
+                        <div class="table-cell w-46">里程碑是否逾期</div>
+                    </th>
+                    <th>
+                        <div class="table-cell w-47 project-mana-title-header">已回款比例
+                            <div class = "sort-arrow" {{action "sorting" "confirmedProgress"}}></div>
+                        </div>
+                    </th>
+                    {{!-- <th>
+                        <div class="table-cell w-48">金融得分</div>
+                    </th>
+                    <th>
+                        <div class="table-cell w-49">战略意义得分</div>
+                    </th>
+                    <th>
+                        <div class="table-cell w-50">产品匹配度得分</div>
+                    </th>
+                    <th>
+                        <div class="table-cell w-51">总分</div>
+                    </th> --}}
+                    {{!--
+                    <th>
+                        <div class="table-cell w-38">总节点数</div>
+                    </th>
+                    <th>
+                        <div class="table-cell w-39">压力</div>
+                    </th> --}}
+                    <th data-fixed="true" data-direction="right">
+                        <div class="table-cell w-end">操作</div>
+                    </th>
+                </tr>
+            </thead>
+        </table>
+    </div>
+    {{!-- 内容 --}}
+    <div class="fixed-table_body-wraper {{unless _isEmptyOrNot 'no-data'}} {{if minDatas 'min-data'}}">
+        <table class="fixed-table_body" cellspacing="0" cellpadding="0" border="0">
+            <tbody>
+                {{#each _Datas as |treeValue|}}
+                <tr>
+                    <td>
+                        <div class="table-cell w-6" title={{treeValue.projectAlias}}>{{treeValue.projectAlias}}</div>
+                    </td>
+                    <td>
+                        <div class="table-cell w-first" title={{treeValue.projectId}}>{{treeValue.projectId}}</div>
+                    </td>
+                    <td>
+                        <div class="table-cell w-1" title={{treeValue.contractNo}}>{{treeValue.contractNo}}</div>
+                    </td>
+                    <td>
+                        <div class="table-cell w-2">{{show-time treeValue.signContractTime}}</div>
+                    </td>
+                    <td>
+                        <div class="table-cell w-3">{{treeValue.purchaseType}}</div>
+                    </td>
+                    <td>
+                        <div class="table-cell w-4">{{show-time treeValue.onlineTime}}</div>
+                    </td>
+                    <td>
+                        <div class="table-cell w-5" title={{treeValue.projectNameIn}}>{{treeValue.projectNameIn}}</div>
+                    </td>
+                    {{!--
+                    <td>
+                        <div class="table-cell w-6" title={{treeValue.projectAlias}}>{{treeValue.projectAlias}}</div>
+                    </td> --}}
+                    <td>
+                        <div class="table-cell w-7">{{treeValue.projectType}}</div>
+                    </td>
+                    <td>
+                        <div class="table-cell w-8">{{show-time treeValue.startTime}}</div>
+                    </td>
+                    <td>
+                        <div class="table-cell w-9">{{treeValue.projectPrice}}{{#if treeValue.isBudget}}
+                            <span class="budget">(预算)</span>{{/if}}
+                        </div>
+                    </td>
+                    <td>
+                        <div class="table-cell w-36" title={{treeValue.projectLevel}}>{{treeValue.projectLevel}}</div>
+                    </td>
+                    <td>
+                        <div class="table-cell w-37" title={{treeValue.projectClassify}}>{{treeValue.projectClassify}}</div>
+                    </td>
+                    <td>
+                        <div class="table-cell w-52">
+                            总产品数:{{treeValue.productTypeCount}}&nbsp;总节点数:{{treeValue.nodeCount}}
+                            <a class="my-list-btn">
+                                <span {{action 'lookDetails' treeValue}}>查看详情</span>
+                            </a>
+                        </div>
+                    </td>
+                    <td>
+                        <div class="table-cell w-11" title={{treeValue.customerName}}>{{treeValue.customerName}}</div>
+                    </td>
+                    <td>
+                        <div class="table-cell w-12" title={{treeValue.customerDepartmentName}}>{{treeValue.customerDepartmentName}}</div>
+                    </td>
+                    <td>
+                        <div class="table-cell w-13" title={{treeValue.lever2Manager}}>{{treeValue.lever2Manager}}</div>
+                    </td>
+                    <td>
+                        <div class="table-cell w-14" title={{treeValue.lever3Manager}}>{{treeValue.lever3Manager}}</div>
+                    </td>
+                    <td>
+                        <div class="table-cell w-15" title={{treeValue.customerStaffName}}>{{treeValue.customerStaffName}}</div>
+                    </td>
+                    <td>
+                        <div class="table-cell w-16" title={{treeValue.customerPrimaryContact}}>{{treeValue.customerPrimaryContact}}</div>
+                    </td>
+                    <td>
+                        <div class="table-cell w-41" title ={{treeValue.teams}} >{{treeValue.teams}}</div>
+                    </td>
+                    <td>
+                        <div class="table-cell w-17">{{treeValue.involvedRegion}}</div>
+                    </td>
+                    <td>
+                        <div class="table-cell w-18">{{treeValue.saleManager}}</div>
+                    </td>
+                    <td>
+                        <div class="table-cell w-40">{{treeValue.areaProjectManager}}</div>
+                    </td>
+                    <td>
+                        <div class="table-cell w-19">{{treeValue.regionalSolManager}}</div>
+                    </td>
+                    <td>
+                        <div class="table-cell w-20">{{treeValue.projectManagerId}}</div>
+                    </td>
+                    <td>
+                        <div class="table-cell w-21" title = {{treeValue.implementManager}}>{{treeValue.implementManager}}</div>
+                    </td>
+                    <td>
+                        <div class="table-cell w-22" title={{treeValue.developManager}}>{{treeValue.developManager}}</div>
+                    </td>
+                    <td>
+                        <div class="table-cell w-23" title ={{treeValue.testManager}}>{{treeValue.testManager}}</div>
+                    </td>
+                    <td>
+                        <div class="table-cell w-24" title={{treeValue.serviceManager}}>{{treeValue.serviceManager}}</div>
+                    </td>
+                    <td>
+                        <div class="table-cell w-25">{{treeValue.commerceStatus}}</div>
+                    </td>
+                    <td>
+                        <div class="table-cell w-26">{{treeValue.implementBases}}</div>
+                    </td>
+                    <td>
+                        <div class="table-cell w-27">{{treeValue.implementStatus}}</div>
+                    </td>
+                    <td>
+                        <div class="table-cell w-28">{{treeValue.developStatus}}</div>
+                    </td>
+                    <td>
+                        <div class="table-cell w-29">{{treeValue.onlineStatus}}</div>
+                    </td>
+                    <td>
+                        <div class="table-cell w-30">{{treeValue.operateStatus}}</div>
+                    </td>
+                    <td>
+                        <div class="table-cell w-31" title={{treeValue.currentProgress}}>{{treeValue.currentProgress}}</div>
+                    </td>
+                    <td>
+                        <div class="table-cell w-32" title = {{treeValue.recentPlan}} >{{treeValue.recentPlan}}</div>
+                    </td>
+                    <td>
+                        <div class="table-cell w-33">{{treeValue.process}}</div>
+                    </td>
+                    <td>
+                        <div class="table-cell w-34">{{treeValue.risk}}</div>
+                    </td>
+                    <td>
+                        <div class="table-cell w-35" title={{treeValue.responseMeasures}}>{{treeValue.responseMeasures}}</div>
+                    </td>
+                    
+                    {{!-- <td>
+                        <div class="table-cell w-38">{{treeValue.customerPrimaryContact}}</div>
+                    </td> 
+                    <td>
+                        <div class="table-cell w-39">{{treeValue.pressure}}</div>
+                    </td> --}}
+                    {{!-- <td>
+                        <div class="table-cell w-42">{{treeValue.lastMonthWorkTime}}</div>
+                    </td>
+                    <td>
+                        <div class="table-cell w-43">{{treeValue.totalWorkTime}}</div>
+                    </td> --}}
+                    <td>
+                        <div class="table-cell w-44" title ={{treeValue.mailstoneName}}>{{treeValue.mailstoneName}}</div>
+                    </td>
+                    <td>
+                        <div class="table-cell w-45">{{treeValue.planFinishedTime}}</div>
+                    </td>
+                    <td>
+                        <div class="table-cell w-46">{{treeValue.isOverdue}}</div>
+                    </td>
+                    <td>
+                        <div class="table-cell w-47">{{treeValue.confirmedProgress}}</div>
+                    </td>
+                    {{!-- <td>
+                        <div class="table-cell w-48">{{treeValue.moneyScore}}</div>
+                    </td>
+                    <td>
+                        <div class="table-cell w-49">{{treeValue.strategiSignificance}}</div>
+                    </td>
+                    <td>
+                        <div class="table-cell w-50">{{treeValue.productMatch}}</div>
+                    </td>
+                    <td>
+                        <div class="table-cell w-51">{{treeValue.totalScore}}</div>
+                    </td> --}}
+                    <td>
+                        <div class="table-cell w-end">
+                            <a>
+                                <span {{action 'editProjectForm' treeValue}}>编辑</span>
+                            </a>
+                            <a>
+                                <i class="glyphicon glyphicon-flag" title="评分" {{action 'scoreProjectForm' treeValue}}></i>
+                            </a>
+                            <a>
+                                <i class="glyphicon glyphicon-plus-sign" title="添加节点" {{action 'projectProductForm' treeValue}}></i>
+                            </a>
+                        </div>
+                    </td>
+                </tr>
+                {{/each}}
+            </tbody>
+        </table>
+    </div>
+    {{!-- 固定列 --}} {{!-- left --}}
+    <div class="fixed-table_fixed fixed-table_fixed-left">
+        <div class="fixed-table_header-wraper">
+            <table class="fixed-table_header" cellspacing="0" cellpadding="0" border="0">
+                <thead>
+                    <tr>
+                        <th class="w-6">
+                            <div class="table-cell">项目通称</div>
+                        </th>
+                    </tr>
+                </thead>
+            </table>
+        </div>
+        <div class="fixed-table_body-wraper {{if minDatas "min-data"}}">
+            <table class="fixed-table_body" cellspacing="0" cellpadding="0" border="0">
+                <tbody>
+                    {{#each _Datas as |_treeValue|}}
+                    <tr>
+                        <td>
+                            <div class="table-cell w-6" title={{_treeValue.projectAlias}}>{{_treeValue.projectAlias}}</div>
+                        </td>
+                    </tr>
+                    {{/each}}
+                </tbody>
+            </table>
+        </div>
+    </div>
+    {{!-- right --}}
+    <div class="fixed-table_fixed fixed-table_fixed-right">
+        <div class="fixed-table_header-wraper">
+            <table class="fixed-table_header" cellspacing="0" cellpadding="0" border="0">
+                <thead>
+                    <tr>
+                        <th>
+                            <div class="table-cell w-end">操作</div>
+                        </th>
+                    </tr>
+                </thead>
+            </table>
+        </div>
+        <div class="fixed-table_body-wraper {{if minDatas "min-data"}}">
+            <table class="fixed-table_body" cellspacing="0" cellpadding="0" border="0">
+                <tbody>
+                    {{#each _Datas as |_treeValue|}}
+                    <tr>
+                        <td>
+                            <div class="table-cell w-end">
+                                <a class="my-list-btn">
+                                    <span {{action 'editProjectForm' _treeValue}}>编辑</span>
+                                </a>
+                                <a class="my-list-btn">
+                                    <span {{action 'history' _treeValue.id}}>历史</span>
+                                </a>
+                                {{!-- <a class="my-list-btn">
+                                    <span {{action 'grade' _treeValue}}>评分</span>
+                                </a> --}}
+                            </div>
+                        </td>
+                    </tr>
+                    {{/each}}
+                </tbody>
+            </table>
+        </div>
+    </div>
+</div>
+{{!-- footer --}}
+<div style="float:right">
+    共{{if filterLists filterData.length filterData.length}}条
+</div>

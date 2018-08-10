@@ -1,0 +1,3 @@
+{{#each filterLists as |filter|}}
+<div class = "filter-list">{{filter.th}}:{{filter.name}}<span class = "cancel-btn" {{action 'removeFilter' filter}}>x</span></div>
+{{/each}}

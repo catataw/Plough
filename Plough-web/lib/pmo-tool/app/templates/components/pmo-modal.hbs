@@ -1,0 +1,29 @@
+<div id ="{{modalId}}" class="modal fade">
+    <div class="modal-dialog health-modal-dialog">
+        <div class="modal-content">
+           {{yield}}
+<div class="row">
+  <div class="col-lg-12 col-md-12 error-info">
+    <p class="error-word">{{errorInfo}}</p>
+  </div>
+</div>
+
+          {{#if hEvent}}
+            <div class="modal-footer">
+                <button type="button" {{action 'sureAct'}} class="btn btn-primary"
+                        style="border-radius: 3px !important;">{{t 'common.sure'}}</button>
+              {{#if hClose}}
+                <button type="button" {{action 'closeAct'}} class="btn btn-default" data-dismiss="modal"
+                        style="border-radius: 3px !important;">{{t 'common.cancel'}}</button>
+                {{else}}
+                <button type="button" class="btn btn-default" data-dismiss="modal"
+                        style="border-radius: 3px !important;">{{t 'common.cancel'}}</button>
+              {{/if}}
+            </div>
+          {{/if}}
+
+
+        </div><!-- /.modal-content -->
+    </div><!-- /.modal-dialog -->
+    
+</div><!-- /.modal -->

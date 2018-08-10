@@ -1,0 +1,236 @@
+<div class="row">
+  <div>
+    <p class="page-header pmo-header title-p">工作记录管理-工作记录自助填报</p>
+  </div>
+</div>
+<div class="row">
+  <div class="col-md-4 col-lg-4">
+    <div class="form-group input-group">
+      {{date-picker date=writeTime valueFormat='YYYY-MM-DD' class="form-control"}}
+      <span class="input-group-btn">
+      <button class="btn btn-default" type="button"><i class="glyphicon glyphicon-zoom-in" {{action 'writeJobTime'}}></i>
+      </button>
+       </span>
+    </div>
+  </div>
+</div>
+
+
+
+<div class="row" id="report-list">
+  <div class="col-md-6 col-lg-6">
+    <div>
+      <table class="table table-striped table-bordered table-health-report">
+        <thead>
+        <tr>
+          <th class="col-md-2 col-lg-2">日期</th>
+          <th class="col-md-1 col-lg-1">星期</th>
+          <th class="col-md-1 col-lg-1">工时进度</th>
+          <th class="col-md-1 col-lg-1">操作</th>
+        </tr>
+        </thead>
+        <tbody>
+          {{#each loadWorkRecord0 as |treeValue|}}
+          <tr>
+            {{#if treeValue.isHoliday}}
+              <td><span>{{treeValue.date}}</span><span class="warning-word margin-2">休</span></td>
+              {{else}}
+              <td><span>{{treeValue.date}}</span></td>
+            {{/if}}
+            <td><p>{{treeValue.week}}</p></td>
+            <td>{{jobtime-bar jobTime=treeValue.workTime}}</td>
+            <td>
+              <a><i class="glyphicon glyphicon-pencil" title="填报工作记录" {{action 'writeTimeForm' treeValue.date}}></i></a>
+            </td>
+          </tr>
+          {{/each}}
+
+        </tbody>
+      </table>
+    </div>
+  </div>
+  <div class="col-lg-offset-2 col-md-offset-2"></div>
+  <div class="col-md-6 col-lg-6">
+    <div>
+      <table class="table table-striped table-bordered table-health-report">
+        <thead>
+        <tr>
+          <th class="col-md-2 col-lg-2">日期</th>
+          <th class="col-md-1 col-lg-1">星期</th>
+          <th class="col-md-1 col-lg-1">工时进度</th>
+          <th class="col-md-1 col-lg-1">操作</th>
+        </tr>
+        </thead>
+        <tbody>
+        {{#each loadWorkRecord1 as |treeValue|}}
+          <tr>
+            <td><p>{{treeValue.date}}</p></td>
+            <td><p>{{treeValue.week}}</p></td>
+            <td>{{jobtime-bar jobTime=treeValue.workTime}}</td>
+            <td>
+              <a><i class="glyphicon glyphicon-pencil" title="填报工时" {{action 'writeTimeForm' treeValue.date}}></i></a>
+            </td>
+          </tr>
+        {{/each}}
+
+        </tbody>
+      </table>
+    </div>
+  </div>
+
+</div>
+
+
+<div id="divbg" class="hide" >
+</div>
+
+
+
+<div id ="addWorkTimeDiv" class="hide">
+  <div class="modal-dialog modal-dialog-add-workTime health-modal-dialog">
+
+    <div class="modal-content">
+  <div class="modal-header" >
+    <button type="button" class="close" {{action 'closeWriteTimeForm'}}  data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+    <h4 class="modal-title">填写 {{editDate}} 工作记录</h4>
+  </div>
+  <div class="modal-body form-modal">
+    <div class="add-row">
+      <div class="col-lg-12 col-md-12">
+        <p class="title">添加工作记录:</p>
+      </div>
+        <div class="div-2" id="ember-basic-dropdown-wormhole">
+          {{#x-select value=addOneJobTime.projectName  action="chooseDestination" as |xs|}}
+            {{#each participateProject as | treeValue|}}
+              {{#xs.option value=treeValue }}{{treeValue}}{{/xs.option}}
+            {{/each}}
+          {{/x-select}}
+        </div>
+      <span class="danger-word">*</span>
+      <div class="div-15">
+        {{#x-select value=addOneJobTime.workType workId=treeValue.id action="typeChanged" as |xs|}}
+        {{#xs.option value='1'}}项目管理{{/xs.option}}
+        {{#xs.option value='2'}}售前{{/xs.option}}
+        {{#xs.option value='3'}}售前支撑{{/xs.option}}
+        {{#xs.option value='4'}}需求调研{{/xs.option}}
+        {{#xs.option value='5'}}UIUE{{/xs.option}}
+        {{#xs.option value='6'}}开发{{/xs.option}}
+        {{#xs.option value='7'}}测试{{/xs.option}}
+        {{#xs.option value='8'}}实施、部署{{/xs.option}}
+        {{#xs.option value='9'}}售后服务{{/xs.option}}
+        {{#xs.option value='10'}}售后服务支撑{{/xs.option}}
+        {{#xs.option value='11'}}CICD{{/xs.option}}
+        {{#xs.option value='12'}}综合管理{{/xs.option}}
+        {{#xs.option value='13'}}培训与文档{{/xs.option}}
+        {{#xs.option value='15'}}产品设计{{/xs.option}}
+        {{#xs.option value='16'}}数据分析{{/xs.option}}
+        {{#xs.option value='14'}}请假{{/xs.option}}
+      {{/x-select}}
+      </div>
+      <span class="danger-word">*</span>
+      <div class="div-1">
+        <div class="form-group input-group">
+          {{input value=addOneJobTime.workTime class="form-control job-time-input"}}
+          <span class="input-group-btn">
+      <button type="button" class="btn btn-default">h
+      </button>
+      </span>
+        </div>
+      </div>
+      <span class="danger-word">*</span>
+      <div class="div-5">
+        <li class="glyphicon glyphicon-pencil input-icon"></li>
+        <div {{action 'showTextArea'}} class="form-control job-time-div">&nbsp;&nbsp;{{addOneJobTime.workDetail}}</div>
+      </div>
+
+      <div class="div-1">
+        <button class="btn btn-success" {{action 'doAddOneJobTime'}}>add+</button>
+      </div>
+      <div class="clear"></div>
+    </div>
+
+    <div class="col-lg-12 col-md-12">
+      <p  class="title">已添加工时:</p>
+      <table class="table table-hover table-health-report">
+        <thead>
+        <tr>
+          <th class="col-md-3 col-lg-3">参与项目名称</th>
+          <th class="col-md-1 col-lg-1">工作时长</th>
+          <th class="col-md-2 col-lg-2">工时类型</th>
+          <th class="col-md-5 col-lg-5">工作内容</th>
+          <th class="col-md-5 col-lg-5">操作</th>
+        </tr>
+        </thead>
+        <tbody>
+          {{#each writeWorkTime as |treeValue|}}
+          {{#if treeValue.workTime}}
+            <tr {{action 'setCurrentRe' treeValue}}>
+              <td class="col-md-3 col-lg-3 projectNameId slight-word">{{treeValue.projectName}}</td>
+              <td class="col-md-1 col-lg-1">{{treeValue.workTime}}</td>
+              <td class="col-md-2 col-lg-2">{{work-type type=treeValue.workType}}</td>
+              <td class="col-md-5 col-lg-5"><p class="over-hide-word">{{treeValue.workDetail}}</p></td>
+              <td class="col-md-1 col-lg-1"><a><i class="glyphicon glyphicon-trash" title="删除" {{action 'deleteWorkRec' treeValue}}></i></a></td>
+            </tr>
+          {{/if}}
+          {{/each}}
+        </tbody>
+      </table>
+    </div>
+  </div>
+      <div class="row">
+        <div class="col-lg-12 col-md-12 error-info">
+          <p class="error-word">{{errorInfo}}</p>
+        </div>
+      </div>
+      <div class="modal-footer">
+        <button type="button" {{action 'doWriteTimeForm'}} class="btn btn-primary"
+                style="border-radius: 3px !important;">{{t 'common.submit'}}</button>
+        <button type="button" {{action 'closeWriteTimeForm'}}  class="btn btn-default" data-dismiss="modal"
+                style="border-radius: 3px !important;">{{t 'common.close'}}</button>
+      </div>
+    </div>
+  </div>
+</div>
+
+
+
+<div id="workDetailTextareaBg" class="hide" >
+</div>
+
+<div id ="workDetailTextarea" class="hide">
+  <div class="modal-dialog modal-dialog-add-workTime health-modal-dialog">
+
+    <div class="modal-content">
+      <div class="modal-header" >
+        <button type="button" {{action 'closeWorkDetailTextarea'}}  class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+        <h4 class="modal-title">填写 {{addOneJobTime.projectName}}工作记录</h4>
+      </div>
+      <div class="modal-body form-modal">
+
+        <div class="col-lg-12 col-md-12">
+          {{textarea value=addOneJobTime.workDetail class="form-control" rows=12}}
+        </div>
+      </div>
+      <div class="modal-footer">
+        <button type="button" {{action 'addWorkdetail'}} class="btn btn-primary"
+                style="border-radius: 3px !important;">{{t 'common.submit'}}</button>
+        <button type="button" {{action 'closeWorkDetailTextarea'}}  class="btn btn-default" data-dismiss="modal"
+                style="border-radius: 3px !important;">{{t 'common.close'}}</button>
+      </div>
+    </div>
+  </div>
+</div>
+
+{{#pmo-modal modalId ="transitonToAddProjectId" errorInfo=errorInfo  hEvent='transitonToAddProject' }}
+  <div class="modal-header" >
+    <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+    <h4 class="modal-title">前往添加项目</h4>
+  </div>
+  <div class="modal-body">
+    <div class="row">
+      <div class="col-lg-12 col-md-12">
+        <p>您可用于报工的项目不存在，请点击确定前往添加？</p>
+      </div>
+    </div>
+  </div>
+{{/pmo-modal}}

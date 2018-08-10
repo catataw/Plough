@@ -1,0 +1,88 @@
+<div class="mileage-content">
+  <div class="colection-paln">
+    <table>
+      <tr>
+        <th colspan="5">收款计划</th>
+      </tr>
+      <tr>
+        <td>收款条件</td>
+        <td>收款时间</td>
+        <td>收款含税金额（元）</td>
+        <td>收款不含税金额（元）</td>
+        <td>收付款比例%</td>
+      </tr>
+      {{#each _gatheringPlanList as |gatheringPlan|}}
+          {{show-list showItem=gatheringPlan tomodifyGatheringPlan="modifyGatheringPlan" touploadGatheringPlan="uploadGatheringPlan" todeleteGatheringPlan="deleteGatheringPlan"}}
+      {{/each}}
+      <tr>
+        <td colspan="5"><a href="javascript:void(0)" onclick={{action 'addGatheringPlan'}} >+添加行</a></td>
+      </tr>
+      <tr>
+        <td colspan="2">合计</td>
+        <td colspan="3">{{sumTax}}</td>
+      </tr>
+    </table>
+  </div>
+
+  <div class="mileage-info">
+    <ul>
+      <li><div></div>&nbsp;&nbsp;已完成&nbsp;&nbsp;&nbsp;&nbsp;</li>
+      <li><div></div>&nbsp;&nbsp;进行中&nbsp;&nbsp;&nbsp;&nbsp;</li>
+      <li><div></div>&nbsp;&nbsp;未开始</li>
+    </ul>
+    <ul class='navBar'>
+     {{#each _mailStoneList as |mailStone index|}}
+        {{#if mailStone.weight}}
+         {{progress-status weight=mailStone.weight _colorList=colorList index=index content=mailStone.mailstoneName}}
+        {{/if}}
+{{!--<li class={{get-str-from-arr mailStone.status}} style={{add-style mailStone.weight index}} >{{mailStone.mailstoneName}}</li>--}}        
+  
+     {{/each}}
+    </ul>
+   
+    <table>
+      <tr>
+        <th>里程碑</th>
+        <th>权重%</th>
+        <th>计划完成时间</th>
+        <th>交付物</th>
+        <th>进度状态</th>
+        <th>到达确认</th>
+        <th>实际完成时间</th>
+      </tr>
+      {{#each _mailStoneList as |mailStone|}}
+      {{show-mail-list showItem=mailStone tomodifyMailStone="modifyMailStone" touploadMailStone="uploadMailStone" todeleteMailStone="deleteMailStone"}}
+          
+      {{/each}}
+    
+      <tr>
+        <td colspan="7"><a href="javascript:void(0)" onclick={{action 'addMailStone'}}>+添加行</a></td>
+      </tr>
+    </table>
+  </div>
+  <div class="colection-paln">
+    <table>
+      <tr>
+        <th colspan="5">项目收入确认</th>
+      </tr>
+
+      <tr>
+        <td>进度确认时间</td>
+        <td>确认含税金额（元）</td>
+        <td>税率%</td>
+        <td>确认不含税金额（元）</td>
+        <td>已确认项目进度%</td>
+      </tr>
+
+       {{#each _gatheringConfirmList as |gatheringConfirm|}}
+       {{show-confirm-list showItem=gatheringConfirm tomodifyConfirm="modifyConfirm" touploadConfirm="uploadConfirm" todeleteConfirm="deleteConfirm"}}
+     
+      {{/each}}
+     
+      <tr>
+        <td colspan="5"><a href="javascript:void(0)" onclick={{action 'addGatheringConfirm'}}>+添加行</a></td>
+      </tr>
+     
+    </table>
+  </div>
+</div>

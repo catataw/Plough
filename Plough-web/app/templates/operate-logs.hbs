@@ -1,0 +1,61 @@
+<div class="row">
+  <div>
+    <p class="page-header pmo-header title-p">操作日志</p>
+  </div>
+</div>
+<div class="row">
+  <div class="col-md-4 col-lg-4">
+    <div class="form-group input-group">
+      {{input value=searchWordInput placeholder='请按操作或者操作人信息模糊搜索' key-up="searchedItemFromWord"  class=" search-input form-control"}}
+      <span class="input-group-btn">
+      <button class="btn btn-default" type="button"><i class="glyphicon glyphicon-search"></i>
+      </button>
+  </span>
+    </div>
+  </div>
+</div>
+
+<div class="row" id="report-list">
+  <div class="col-md-12 col-lg-12">
+    <div>
+      <table class="table table-striped table-bordered table-health-report">
+        <thead>
+        <tr>
+          <th class="col.md-1 col-lg-1">操作序号</th>
+          <th>操作内容</th>
+
+        </tr>
+        </thead>
+        <tbody>
+        {{#each showData as |treeValue index|}}
+          <tr>
+            <td class="col-lg-1 col-md-1"><p>{{index}}</p></td>
+            <td><p>{{treeValue.logDetail}}</p></td>
+          </tr>
+        {{/each}}
+
+        </tbody>
+      </table>
+    </div>
+    <div class="page-bar">
+      <div class="filtered-info span4">
+        <label>当前为第{{currentPage}}页<a href="#"></a></label>
+      </div>
+      <div class="selected-hosts-info span4"></div>
+      <div class="items-on-page">
+        <label>{{t 'common.show'}}:
+          <select id="list-status" class="form-control-2" name="pagesize" onchange={{action "refreshPageSize"}}>
+            <option value="10">10</option>
+            <option value="50">50</option>
+            <option value="100">100</option>
+          </select>
+        </label>
+      </div>
+      <div class="info">{{beginShowItem}}-{{endShowItem}} of {{loadDataLength}}</div>
+      <div class="paging_two_button">
+        <a class='paginate_previous' {{action 'pageDown'}} ><i class="glyphicon glyphicon-arrow-left" ></i></a>
+        <a class='paginate_next' {{action 'pageUp'}}><i class="glyphicon glyphicon-arrow-right"></i></a>
+      </div>
+    </div>
+  </div>
+</div>

@@ -1,0 +1,61 @@
+<div class="col-md-2 col-lg-2 img-height">
+    <li title="导入excl" class="icon-add glyphicon glyphicon-upload" {{action 'addSomeBugsForm'}}></li>
+
+</div>
+
+
+{{#pmo-modal modalId ="addSomeBugsForm" errorInfo=errorInfo hEvent='submitExclData' }}
+  <div class="modal-header" >
+    <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+    <h4 class="modal-title">批量导入机器</h4>
+  </div>
+  <h5 class=" warning-word col-lg-12 col-md-12">注意：导入的excl格式如下所示，且导入的是第一张sheet的内容。</h5>
+  <div class="modal-body">
+    <div class="row">
+      <div class="col-lg-12 col-md-12">
+        <table class="table-striped table-bordered table-health-report">
+          <thead>
+          <tr>
+
+
+
+            <th>问题类型</th>
+            <th>关键字</th>
+            <th>主题</th>
+            <th>经办人</th>
+            <th>报告人</th>
+            <th>优先级</th>
+            <th>状态</th>
+            <th>解决结果</th>
+            <th>创建</th>
+            <th>更新</th>
+            <th>到期日</th>
+          </tr>
+          </thead>
+          <tbody>
+          <tr>
+            <td>缺陷</td>
+            <td>YQT-2217</td>
+            <td>子帐号收藏微信重点人新闻后，我的收藏-微信重点人中无记录</td>
+            <td>蔡衡</td>
+            <td>顾钧</td>
+            <td>Major.</td>
+            <td>Resolved</td>
+            <td>Fixed</td>
+            <td>2017/6/26  15:59:00</td>
+            <td>2017/6/27  17:08:00</td>
+            <td></td>
+
+          </tr>
+          </tbody>
+        </table>
+
+      </div>
+    </div>
+    <div class="row" >
+      <div class="col-lg-12">
+        {{file-upload url="?m=Bug&a=addBugExcl" class="input-file"}}
+      </div>
+    </div>
+  </div>
+{{/pmo-modal}}

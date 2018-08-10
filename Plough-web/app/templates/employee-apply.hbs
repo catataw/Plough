@@ -1,0 +1,279 @@
+<div class="row">
+  <div>
+    <p class="page-header pmo-header title-p">外协管理-外协申请</p>
+  </div>
+</div>
+<div class="row">
+  <div class="col-md-4 col-lg-4">
+    <div class="form-group input-group">
+      {{input value=searchWordInput placeholder='请按小组名，组等信息模糊搜索' key-up="searchedItemFromWord"  class="search-input form-control"}}
+      <span class="input-group-btn">
+      <button class="btn btn-default" type="button"><i class="glyphicon glyphicon-search"></i>
+      </button>
+  </span>
+    </div>
+  </div>
+  <div class="col-md-8 col-lg-8 img-height">
+    {{#if session.isSuper}}
+      <li class="col-left-curor" title="导出预算列表"> <a href="index.php?m=Team&a=exportTeamBudget"><span class="badge badge-success">导出预算列表</span></a> </li>
+      <li class="col-left-curor" title="添加外协预算"{{action 'showAddProjectForm'}}> <a><span class="badge badge-success">添加外协预算</span></a> </li>
+      <li class="col-left-curor" title="导入excl" {{action 'showAddSomeProjectForm'}}> <a><span class="badge badge-success">导入外协</span></a> </li>
+    {{/if}}
+    {{#if session.isAdmin}}
+      <li class="col-left-curor" title="导入excl" {{action 'showAddSomeProjectForm'}}> <a><span class="badge badge-success">导入外协</span></a> </li>
+    {{/if}}
+  </div>
+</div>
+
+<div class="row" id="report-list">
+  <div class="col-md-12 col-lg-12">
+    <div>
+      <table class="table table-striped table-bordered table-health-report">
+        <thead>
+        <tr>
+          <th>小组名称</th>
+          <th>小组负责人</th>
+          <th>总金额（单位：万元）</th>
+          <th>已用（单位：万元）</th>
+          <th>剩余（单位：万元）</th>
+          <th>预算开始时间</th>
+          <th>预算截止时间</th>
+          <th class="col-md-1 col-lg-1">操作</th>
+        </tr>
+
+        </thead>
+        <tbody>
+        {{#each showData as |treeValue|}}
+          {{#if treeValue}}
+            <tr>
+              <td>{{treeValue.teamName}}</td>
+              <td>{{treeValue.teamLeader}}</td>
+              <td>{{treeValue.budget}}</td>
+              <td>{{treeValue.usedBudget}}</td>
+              <td>{{treeValue.leftBudget}}</td>
+              <td>{{treeValue.beginTime}}</td>
+              <td>{{treeValue.endTime}}</td>
+              {{#if session.isAdmin}}
+                <td><a {{action 'applyEmployee' treeValue}}><span class="badge badge-success">申请外协</span></a></td>
+              {{/if}}
+              {{#if session.isSuper}}
+                <td><a {{action 'applyEmployee' treeValue}}><span class="badge badge-success">申请外协</span></a></td>
+              {{/if}}
+              {{#if session.isOrigin}}
+                <td><a><p>暂无操作权限</p></a></td>
+              {{/if}}
+              {{#if session.isTeamLeader}}
+                <td><a><p>暂无操作权限</p></a></td>
+              {{/if}}
+            </tr>
+          {{/if}}
+        {{/each}}
+        </tbody>
+      </table>
+    </div>
+    <div class="page-bar">
+      <div class="filtered-info span4">
+        <label>当前为第{{currentPage}}页<a href="#"></a></label>
+      </div>
+      <div class="selected-hosts-info span4"></div>
+      <div class="items-on-page">
+        <label>{{t 'common.show'}}:
+          <select id="list-status" class="form-control-2" name="pagesize" onchange={{action "refreshPageSize"}}>
+            <option value="10">10</option>
+            <option value="50">50</option>
+            <option value="100">100</option>
+          </select>
+        </label>
+      </div>
+      <div class="info">{{beginShowItem}}-{{endShowItem}} of {{loadDataLength}}</div>
+      <div class="paging_two_button">
+        <a class='paginate_previous' {{action 'pageDown'}} ><i class="glyphicon glyphicon-arrow-left" ></i></a>
+        <a class='paginate_next' {{action 'pageUp'}}><i class="glyphicon glyphicon-arrow-right"></i></a>
+      </div>
+    </div>
+  </div>
+</div>
+
+
+
+
+
+{{#pmo-modal modalId ="addProjectForm" addProject=addProject errorInfo=errorInfo  hEvent='doAddProject' }}
+  <div class="modal-header" >
+    <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+    <h4 class="modal-title">添加小组预算</h4>
+  </div>
+
+  <div class="modal-body form-modal">
+    <div class="col-lg-12 col-md-12">
+      <form role="form" id="addComputerFormId">
+        <div class="form-group col-lg-6 col-md-6">
+          <label>小组名称：</label>
+          {{input value=addProject.teamName class="form-control"}}
+        </div>
+        <div class="form-group col-lg-6 col-md-6">
+          <label>小组负责人：</label>
+          {{input value=addProject.teamLeader class="form-control"}}
+        </div>
+
+        <div class="form-group col-lg-6 col-md-6">
+          <label>总金额（单位：万元）：</label>
+          {{input value=addProject.budget class="form-control"}}
+        </div>
+        <div class="form-group col-lg-6 col-md-6">
+          <label>已用（单位：万元）：</label>
+          {{input value=addProject.usedBudget class="form-control"}}
+        </div>
+        <div class="form-group col-lg-6 col-md-6">
+          <label>预算开始时间：</label>
+          {{date-picker date=addProject.beginTime valueFormat='YYYY-MM-DD' class="form-control"}}
+        </div>
+        <div class="form-group col-lg-6 col-md-6">
+          <label>预算截止时间：</label>
+          {{date-picker date=addProject.endTime valueFormat='YYYY-MM-DD' class="form-control"}}
+        </div>
+
+
+
+      </form>
+    </div>
+  </div>
+{{/pmo-modal}}
+
+
+
+{{#pmo-modal modalId ="addSomeProjectForm" errorInfo=errorInfo hEvent='submitExclData' }}
+  <div class="modal-header" >
+    <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+    <h4 class="modal-title">批量导入项目</h4>
+  </div>
+  <h5 class=" warning-word col-lg-12 col-md-12">注意：导入的excl格式如下所示，且导入的是第一张sheet的内容。</h5>
+  <div class="modal-body">
+    <div class="row">
+      <div class="col-lg-12 col-md-12">
+        <table class="table-striped table-bordered table-health-report">
+          <thead>
+          <tr>
+            <th>小组名称</th>
+            <th>小组负责人</th>
+            <th>总金额（单位：万元）</th>
+            <th>已用（单位：万元）</th>
+            <th>预算开始时间</th>
+            <th>预算截止时间</th>
+          </tr>
+          </thead>
+          <tbody>
+          <tr>
+            <td>在线2017年hadoop维保项目</td>
+            <td>谢晶</td>
+            <td>1200000.00</td>
+            <td>1200000.00</td>
+            <td>2017-1-1</td>
+            <td>2017-12-31</td>
+          </tr>
+          </tbody>
+        </table>
+      </div>
+    </div>
+    <div class="row" >
+      <div class="col-lg-12">
+        {{file-upload url="?m=Team&a=addTeamBudgetExcl" class="input-file"}}
+      </div>
+    </div>
+  </div>
+{{/pmo-modal}}
+
+{{#pmo-modal modalId ="applyEmployeeForm" applyTeam=applyTeam errorInfo=errorInfo hEvent='submitEmployeeApply'}}
+  <div class="modal-header" >
+    <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+    <h4 class="modal-title">申请外协</h4>
+  </div>
+
+  <div class="modal-body form-modal">
+    <div class="col-lg-12 col-md-12">
+      <form role="form" id="addComputerFormId">
+        <div class="form-group col-lg-6 col-md-6">
+          <label>总金额（单位：万）：</label>
+          {{applyTeam.budget}}
+        </div>
+
+        <div class="form-group col-lg-6 col-md-6">
+          <label>剩余金额（单位：万）：</label>
+          {{applyTeam.leftBudget }}
+        </div>
+        <div class="form-group col-lg-6 col-md-6">
+          <label>小组名称：</label>
+          {{input value=applyTeam.teamName disabled='disabled' class="form-control"}}
+        </div>
+        <div class="form-group col-lg-6 col-md-6">
+          <label>小组负责人：</label>
+          {{input value=applyTeam.teamLeader disabled='disabled' class="form-control"}}
+        </div>
+
+        <div class="form-group col-lg-6 col-md-6">
+          <label>需求职位：</label>
+          {{#x-select value=applyTeam.position action="positionChanged"  as |xs|}}
+            {{#xs.option value='文档工程师'}}文档工程师{{/xs.option}}
+            {{#xs.option value='运维实施'}}运维实施{{/xs.option}}
+            {{#xs.option value='Linux C'}}Linux C{{/xs.option}}
+            {{#xs.option value='Linux C++'}}Linux C++{{/xs.option}}
+            {{#xs.option value='IOS 开发'}}IOS 开发{{/xs.option}}
+            {{#xs.option value='Android开发'}}Android开发{{/xs.option}}
+            {{#xs.option value='软件测试'}}软件测试{{/xs.option}}
+            {{#xs.option value='数据分析'}}数据分析{{/xs.option}}
+          {{/x-select}}
+        </div>
+        <div class="form-group col-lg-6 col-md-6">
+          <label>需求级别：</label>
+          {{#x-select value=applyTeam.level action="levelChanged"  as |xs|}}
+            {{#xs.option value='初级'}}初级{{/xs.option}}
+            {{#xs.option value='初级或中级'}}初级或中级{{/xs.option}}
+            {{#xs.option value='中级'}}中级 C{{/xs.option}}
+            {{#xs.option value='中级或高级'}}中级或高级{{/xs.option}}
+            {{#xs.option value='高级'}}高级{{/xs.option}}
+          {{/x-select}}
+        </div>
+        <div class="form-group col-lg-6 col-md-6">
+          <label>服务方式：</label>
+            {{#x-select value=applyTeam.serviceType action="serviceTypeChanged"  as |xs|}}
+              {{#xs.option value='外地驻场'}}外地驻场{{/xs.option}}
+              {{#xs.option value='苏研驻场'}}苏研驻场{{/xs.option}}
+            {{/x-select}}
+        </div>
+        <div class="form-group col-lg-6 col-md-6">
+          <label>需求时长：</label>
+          {{#x-select value=applyTeam.time action="timeChanged"  as |xs|}}
+            {{#xs.option value='1'}}1个月{{/xs.option}}
+            {{#xs.option value='2'}}2个月{{/xs.option}}
+            {{#xs.option value='3'}}3个月{{/xs.option}}
+            {{#xs.option value='4'}}4个月{{/xs.option}}
+            {{#xs.option value='5'}}5个月{{/xs.option}}
+            {{#xs.option value='6'}}6个月{{/xs.option}}
+            {{#xs.option value='7'}}7个月{{/xs.option}}
+            {{#xs.option value='8'}}8个月{{/xs.option}}
+            {{#xs.option value='9'}}9个月{{/xs.option}}
+            {{#xs.option value='10'}}10个月{{/xs.option}}
+            {{#xs.option value='11'}}11个月{{/xs.option}}
+            {{#xs.option value='12'}}12个月{{/xs.option}}
+          {{/x-select}}
+        </div>
+        <div class="form-group col-lg-6 col-md-6">
+          <label>工作地点：</label>
+          {{input value=applyTeam.location class="form-control"}}
+        </div>
+        <div class="form-group col-lg-6 col-md-6">
+          <label>需求人数：</label>
+          {{input value=applyTeam.manCount placeholder='填写需求的人数，填写正整数' class="form-control"}}
+        </div>
+        <div class="form-group col-lg-6 col-md-6">
+          <label>期望到岗时间：</label>
+          {{date-picker date=applyTeam.arriveTime valueFormat='YYYY-MM-DD' class="form-control"}}
+        </div>
+        <div class="form-group col-lg-12 col-md-12">
+          <label class="width-15">职位描述：</label>
+          {{textarea cols="80" rows="6" value=applyTeam.jobDesc class="form-control width-80"}}
+        </div>
+      </form>
+    </div>
+  </div>
+{{/pmo-modal}}

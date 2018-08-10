@@ -1,0 +1,23 @@
+export default {
+    'common.back':'返回',
+    'common.check':'检测',
+    'common.show':'显示',
+    'check.summary':'综述',
+    'common.complete':'完成',
+    'common.sure':'确定',
+    'common.cancel':'取消',
+    'common.submit':'提交',
+    'common.close':'关闭',
+    'common.ok':'正常',
+    'common.ok.info':'-',
+    'common.not.ok':'异常',
+    'common.op.count':'个操作',
+    'job.time.format.error':'提交失败，每天工时最长为24小时，请修改后重新提交！',
+    'job.time.nature.format.error':'提交失败，工时填报需为正整数！',
+    'job.time.add.nature.format.error':'添加失败，工时填报需为正整数！',
+    'job.detail.is.null':'提交失败，工作内容为必填，请添加工作内容后重新提交！',
+    'job.week.time.format.error':'提交失败,按周填报时，需满足每天工作平均不小于8小时，请修改后提交!',
+    'dashbord.operate':'操作区域',
+    'score.format.error':'提交分数不合法，请重新提交',
+   'job.add.time.format.error':'添加工时错误，超过填报天数*24，请修改后重新填报'
+};

@@ -1,0 +1,7 @@
+{{#if isHealthy}}
+  <button class="btn btn-health-report btn-report-success">{{value}}</button>
+{{else if isUnhealthy}}
+  <button class="btn btn-health-report btn-report-danger">{{value}}</button>
+{{else if isWarning}}
+  <button class="btn btn-health-report btn-report-warning">{{value}}</button>
+{{/if}}

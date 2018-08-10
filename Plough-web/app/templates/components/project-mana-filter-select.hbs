@@ -1,0 +1,6 @@
+<div class="arrow-up-btn"></div>
+<ul class="project-mana-filter-select-list active-pane">
+    {{#each Lists as |_filter|}}
+    <li {{action "chooseLi" _filter}}>{{_filter.name}}</li>
+    {{/each}}
+</ul>

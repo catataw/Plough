@@ -1,0 +1,257 @@
+<div class="row">
+  <div>
+    <p class="page-header pmo-header title-p">虚拟机-使用中的虚拟机</p>
+  </div>
+</div>
+<div class="row">
+  <div class="col-md-4 col-lg-4">
+    <div class="form-group input-group">
+      {{input value=searchWordInput placeholder='请按IP，租户或者接口人等模糊搜索' key-up="searchedItemFromWord"  class="search-input form-control"}}
+      <span class="input-group-btn">
+        <button class="btn btn-default" type="button"><i class="glyphicon glyphicon-search"></i>
+        </button>
+      </span>
+    </div>
+  </div>
+  <div  class="col-md-4 col-lg-4">
+    <div class="form-group input-group">
+      {{date-picker date=date valueFormat='YYYY-MM-DD' class="form-control"}}
+      <span class="input-group-btn">
+      <button class="btn btn-default" type="button"><i class="glyphicon glyphicon-zoom-in"></i>
+      </button>
+       </span>
+    </div>
+  </div>
+  <div class="col-md-2 col-lg-2 img-height">
+    {{#if session.isAdmin}}
+      <a title="导出虚拟机明细" class="icon-add glyphicon glyphicon-download-alt" href="/Virtual/exportVirtual?exportTime={{date}}"></a>
+      <li title="导入excl" class="icon-add glyphicon glyphicon-upload" {{action 'addSomeComputersForm'}}></li>
+     {{/if}}
+    {{#if session.isSuper}}
+      <a title="导出虚拟机明细"  class="icon-add glyphicon glyphicon-download-alt" href="/Virtual/exportVirtual?exportTime={{date}}"></a>
+      <li title="导入excl" class="icon-add glyphicon glyphicon-upload" {{action 'addSomeComputersForm'}}></li>
+      <a title="导出大组虚机资源" class="icon-add glyphicon glyphicon-download-alt" href="/Virtual/exportBigTeamVirtualMachine?exportTime={{date}}"></a>
+
+    {{/if}}
+  </div>
+</div>
+
+<div class="row" id="report-list">
+
+  <div class="col-md-12 col-lg-12">
+  {{#if showData}}
+    <div>
+
+      <table class="table table-striped table-bordered table-health-report">
+        <thead>
+        <tr>
+          <th class="col.md-3 col-lg-3">租户</th>
+          <th class="col.md-1 col-lg-1">接口人</th>
+          <th class="col.md-1 col-lg-1">IP</th>
+          <th class="col.md-1 col-lg-1">月份</th>
+          <th class="col.md-1 col-lg-1">所在项目</th>
+          <th class="col.md-1 col-lg-1">资源池</th>
+          <th class="col.md-1 col-lg-1">虚拟机名称</th>
+          <th class="col.md-2 col-lg-2">CPU/内存/硬盘</th>
+          <th class="col.md-1 col-lg-1">操作</th>
+        </tr>
+        </thead>
+        <tbody>
+
+        {{#each showData as |treeValue|}}
+          <tr>
+            <td><p>{{treeValue.tenant}}</p></td>
+            <td>{{treeValue.officerName}}</td>
+            <td><p>{{treeValue.ip}}</p></td>
+            <td><p>{{treeValue.date}}</p></td>
+            <td><p>{{treeValue.projectName}}</p></td>
+            <td><p>{{treeValue.poolType}}</p></td>
+            <td><p>{{treeValue.machineName}}</p></td>
+            <td><p>{{treeValue.cpu}}cores/{{treeValue.memory}}GB/{{treeValue.disk}}GB</p></td>
+            <td>
+              {{#if session.isAdmin}}
+                <a><i class="glyphicon glyphicon-pencil" title="编辑" {{action 'editComputerForm' treeValue}}></i></a>
+                <a><i class="glyphicon glyphicon-trash" title="删除" {{action 'deleteComputer' treeValue.computerId}}></i></a>
+               {{/if}}
+              {{#if session.isSuper}}
+                <a><i class="glyphicon glyphicon-pencil" title="编辑" {{action 'editComputerForm' treeValue}}></i></a>
+                <a><i class="glyphicon glyphicon-trash" title="删除" {{action 'deleteComputer' treeValue.computerId}}></i></a>
+               {{/if}}
+              {{#if session.isOrigin}}
+                <a><i class="glyphicon glyphicon-pencil" title="编辑" {{action 'editComputerForm' treeValue}}></i></a>
+              {{/if}}
+              {{#if session.isTeamLeader}}
+                <a><i class="glyphicon glyphicon-pencil" title="编辑" {{action 'editComputerForm' treeValue}}></i></a>
+              {{/if}}
+              {{#if session.isBigTeamLeader}}
+                <a><i class="glyphicon glyphicon-pencil" title="编辑" {{action 'editComputerForm' treeValue}}></i></a>
+              {{/if}}
+            </td>
+          </tr>
+        {{/each}}
+        </tbody>
+      </table>
+    </div>
+  {{else}}
+    <h4>未找到搜索目标，请切换条件搜索！</h4>
+  {{/if}}
+    <div class="page-bar">
+      <div class="filtered-info span4">
+        <label>当前为第{{currentPage}}页<a href="#"></a></label>
+      </div>
+      <div class="selected-hosts-info span4"></div>
+      <div class="items-on-page">
+        <label>{{t 'common.show'}}:
+          <select id="list-status" class="form-control-2" name="pagesize" onchange={{action "refreshPageSize"}}>
+            <option value="10">10</option>
+            <option value="50">50</option>
+            <option value="100">100</option>
+          </select>
+        </label>
+      </div>
+      <div class="info">{{beginShowItem}}-{{endShowItem}} of {{searchItemLength}}</div>
+      <div class="paging_two_button">
+        <a class='paginate_previous' {{action 'pageDown'}} ><i class="glyphicon glyphicon-arrow-left" ></i></a>
+        <a class='paginate_next' {{action 'pageUp'}}><i class="glyphicon glyphicon-arrow-right"></i></a>
+      </div>
+    </div>
+
+  </div>
+
+</div>
+
+{{#pmo-modal modalId ="editComputerForm" editComputer=editComputer errorInfo=errorInfo hEvent='virtualEdit' }}
+  <div class="modal-header" >
+    <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+    <h4 class="modal-title">编辑机器</h4>
+  </div>
+  <div class="modal-body form-modal">
+    <div class="col-lg-12 col-md-12">
+      <form role="form" id="addComputerFormId">
+        <p class="title-p">机器详情：</p>
+        <div class="form-group col-lg-6 col-md-6">
+          <label>IP：</label>
+          {{input disabled='disabled' value=editComputer.ip class="form-control"}}
+        </div>
+        <div class="form-group col-lg-6 col-md-6">
+          <label>CPU：</label>
+          {{input disabled='disabled' value=editComputer.cpu class="form-control"}}
+        </div>
+        <div class="form-group col-lg-6 col-md-6">
+          <label>内核颗数：</label>
+          {{input disabled='disabled' value=editComputer.disk class="form-control"}}
+        </div>
+        <div class="form-group col-lg-6 col-md-6">
+          <label>内存大小GB：</label>
+          {{input disabled='disabled' value=editComputer.memory class="form-control"}}
+        </div>
+        <div class="form-group col-lg-6 col-md-6">
+          <label>磁盘信息：</label>
+          {{input disabled='disabled' value=editComputer.disk class="form-control"}}
+        </div>
+        <div class="form-group col-lg-6 col-md-6">
+          <label>机器名称：</label>
+          {{input disabled='disabled' value=editComputer.machineName class="form-control"}}
+        </div>
+
+        <p class="title-p">使用信息：</p>
+        <div class="form-group col-lg-6 col-md-6">
+          <label>接口人：</label>
+          {{input value=editComputer.officerName disabled='disabled' class="form-control"}}
+        </div>
+        <div class="form-group col-lg-6 col-md-6">
+          <label>项目ID：</label>
+          {{input value=editComputer.projectId class="form-control"}}
+          <span class="danger-word-v">*</span>
+        </div>
+        <div class="form-group col-lg-6 col-md-6">
+          <label>项目名称：</label>
+          {{input value=editComputer.projectName class="form-control"}}
+        </div>
+        <div class="form-group col-lg-6 col-md-6">
+          <label>租户：</label>
+          {{input disabled='disabled' value=editComputer.tenant class="form-control"}}
+        </div>
+        <div class="form-group col-lg-6 col-md-6">
+          <label>使用详情：</label>
+          {{textarea value=editComputer.useDetail class="form-control" rows="3"}}
+        </div>
+        <div class="form-group col-lg-6 col-md-6">
+          <label>资源池：</label>
+          {{input disabled='disabled' value=editComputer.poolType class="form-control"}}
+        </div>
+      </form>
+    </div>
+  </div>
+{{/pmo-modal}}
+
+
+{{#pmo-modal modalId ="addSomeComputersForm" errorInfo=errorInfo hEvent='submitExclData' }}
+  <div class="modal-header" >
+    <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+    <h4 class="modal-title">批量导入机器</h4>
+  </div>
+  <h5 class=" warning-word col-lg-12 col-md-12">注意：导入的excl格式如下所示，且导入的是第一张sheet的内容。</h5>
+  <div class="modal-body">
+    <div class="row">
+      <div class="col-lg-12 col-md-12">
+        <table class="table-striped table-bordered table-health-report">
+          <thead>
+          <tr>
+            <th>位置</th>
+            <th>资源池</th>
+            <th>租户</th>
+            <th>虚拟机名称</th>
+            <th>IP</th>
+            <th>机器ID</th>
+            <th>CPU</th>
+            <th>内存</th>
+            <th>磁盘</th>
+            <th>项目名称</th>
+            <th>项目ID</th>
+            <th>使用详情</th>
+
+          </tr>
+          </thead>
+          <tbody>
+          <tr>
+            <td>苏州</td>
+            <td>新生产区</td>
+            <td>lisi</td>
+            <td>192.168.1.1</td>
+            <td>a09a4769-c833-4200-a4c1-0e35ccaf80b6</td>
+            <td>32</td>
+            <td>512GB</td>
+            <td>4T*12</td>
+            <td>dashuju@cmss.chinamobile.com</td>
+            <td>是</td>
+            <td>否</td>
+            <td>centos6测试.</td>
+          </tr>
+          </tbody>
+        </table>
+
+      </div>
+    </div>
+    <div class="row" >
+      <div class="col-lg-12">
+        {{file-upload url="?m=Virtual&a=importVirtualMachine" class="input-file"}}
+      </div>
+    </div>
+  </div>
+{{/pmo-modal}}
+
+{{#pmo-modal modalId ="deleteComputer" errorInfo=errorInfo  hEvent='computerDelete' }}
+  <div class="modal-header" >
+    <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+    <h4 class="modal-title">删除机器</h4>
+  </div>
+  <div class="modal-body">
+    <div class="row">
+      <div class="col-lg-12 col-md-12">
+        <p>确定是否删除机器？</p>
+      </div>
+    </div>
+  </div>
+{{/pmo-modal}}
+

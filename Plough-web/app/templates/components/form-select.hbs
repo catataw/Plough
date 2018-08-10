@@ -1,0 +1,58 @@
+<div class="form-item">
+  <div class="chang-status">
+    <div>
+      <span>商务状态：</span>
+      {{#x-select value =status.commerceStatus on-change = (action (mut status.commerceStatus)) as |xs|}}
+        {{#xs.option value = "商机中"}}商机中{{/xs.option}}
+        {{#xs.option value = "已立项"}}已立项{{/xs.option}}
+        {{#xs.option value = "已谈判"}}已谈判{{/xs.option}}
+        {{#xs.option value = "已签约"}}已签约{{/xs.option}}
+        {{#xs.option value = "已结项"}}已结项{{/xs.option}}
+      {{/x-select}}
+    </div>
+    <div>
+      <span>实施依据：</span>
+      {{#x-select value =status.implementBases on-change = (action (mut status.implementBases)) as |xs|}}
+        {{#xs.option value = "无"}}无{{/xs.option}}
+        {{#xs.option value = "POC"}}POC{{/xs.option}}
+        {{#xs.option value = "合同"}}合同{{/xs.option}}
+        {{#xs.option value = "POC+合同"}}POC+合同{{/xs.option}}
+      {{/x-select}}
+    </div>
+    <div>
+      <span>实施状态：</span>
+      {{#x-select value =status.implementStatus on-change = (action (mut status.implementStatus)) as |xs|}}
+        {{#xs.option value = "未实施"}}未实施{{/xs.option}}
+        {{#xs.option value = "实施中"}}实施中{{/xs.option}}
+        {{#xs.option value = "已完成"}}已完成{{/xs.option}}
+        
+      {{/x-select}}
+    </div>
+    <div>
+      <span>研发状态：</span>
+      {{#x-select value =status.developStatus on-change = (action (mut status.developStatus)) as |xs|}}
+        {{#xs.option value = "未开发"}}未开发{{/xs.option}}
+        {{#xs.option value = "开发中"}}开发中{{/xs.option}}
+        {{#xs.option value = "已完成"}}已完成{{/xs.option}}
+       
+      {{/x-select}}
+    </div> 
+    <div>
+      <span>上线状态：</span>
+      {{#x-select value =status.onlineStatus on-change = (action (mut status.onlineStatus)) as |xs|}}
+        {{#xs.option value = "未上线"}}未上线{{/xs.option}}
+        {{#xs.option value = "预上线"}}预上线{{/xs.option}}
+        {{#xs.option value = "正式上线"}}正式上线{{/xs.option}}
+      {{/x-select}}
+    </div>
+    <div>
+      <span>交维状态：</span>
+      {{#x-select value =status.operateStatus on-change = (action (mut status.operateStatus)) as |xs|}}
+        {{#xs.option value = "未交维"}}未交维{{/xs.option}}
+        {{#xs.option value = "自运维"}}自运维{{/xs.option}}
+        {{#xs.option value = "已交维"}}已交维{{/xs.option}}
+      {{/x-select}}
+    </div>
+  </div>
+</div>
+

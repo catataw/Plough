@@ -1,0 +1,403 @@
+<div class="row">
+  <div>
+    <p class="page-header pmo-header title-p">项目管理-项目列表</p>
+  </div>
+</div>
+<div class="row">
+  <div class="col-md-4 col-lg-4">
+    <div class="form-group input-group">
+      {{input value=searchWordInput placeholder='请按项目名称，项目编号或者项目经理等信息模糊搜索' key-up="searchedItemFromWord"  class="search-input form-control"}}
+      <span class="input-group-btn">
+      <button class="btn btn-default" type="button"><i class="glyphicon glyphicon-search"></i>
+      </button>
+  </span>
+    </div>
+  </div>
+  <div class="col-md-2 col-lg-2 img-height">
+   {{#if session.isSuper}}
+      <a class="icon-add glyphicon glyphicon-download-alt" href="index.php?m=Project&a=downloadProject"></a>
+      <li title="添加项目" class="icon-add glyphicon glyphicon-plus" {{action 'showAddProjectForm'}}></li>
+      <li title="导入excl" class="icon-add glyphicon glyphicon-upload" {{action 'showAddSomeProjectForm'}}></li>
+   {{/if}}
+
+  </div>
+</div>
+
+<div class="row" id="report-list">
+  <div class="col-md-12 col-lg-12">
+    <div>
+      <table class="table table-striped table-bordered table-health-report">
+        <thead>
+        <tr>
+          <th class="col-md-1 col-lg-1">合同编号</th>
+          <th class="col-md-1 col-lg-1">项目编号</th>
+          <th class="col-md-1 col-lg-1">项目名称</th>
+          <th class="col-md-1 col-lg-1">项目经理</th>
+          <th class="col-md-1 col-lg-1">项目类型</th>
+          {{#if session.isAdmin}}
+             <th class="col-md-1 col-lg-1">项目收入进度</th>
+          {{/if}}
+          {{#if session.isSuper}}
+            <th class="col-md-1 col-lg-1">项目收入进度</th>
+          {{/if}}
+          <th>客户名称</th>
+          <th class="col-md-1 col-lg-1">牵头部门</th>
+          <th class="col-md-1 col-lg-1">所属区域</th>
+          <th class="col-md-1 col-lg-1">项目阶段</th>
+
+          <th class="col-md-1 col-lg-1">省份</th>
+          <th class="col-md-1 col-lg-1">收款状态</th>
+          <th>操作</th>
+        </tr>
+
+        </thead>
+        <tbody>
+        {{#each showData as |treeValue|}}
+          <tr>
+            <td>{{treeValue.contractId}}</td>
+            <td>{{treeValue.projectId}}</td>
+            <td>{{treeValue.projectName}}</td>
+            <td>{{treeValue.userName}}</td>
+            <td>{{treeValue.projectType}}</td>
+          {{#if session.isAdmin}}
+            <td>{{treeValue.getMoney}}/{{treeValue.projectPrice}}</td>
+          {{/if}}
+            {{#if session.isSuper}}
+              <td>{{treeValue.getMoney}}/{{treeValue.projectPrice}}</td>
+            {{/if}}
+            <td>{{treeValue.customer}}</td>
+            <td>{{treeValue.leadDepartment}}</td>
+            <td>{{treeValue.areaBelong}}</td>
+            <td>{{treeValue.projectStage}}</td>
+            <td>{{treeValue.province}}</td>
+            <td>{{treeValue.spitStatus}}</td>
+          {{#if session.isAdmin}}
+            <td><a><i class="glyphicon glyphicon-pencil" title="编辑" {{action 'editProjectForm' treeValue}}></i></a></td>
+          {{/if}}
+          {{#if session.isSuper}}
+            <td><a><i class="glyphicon glyphicon-pencil" title="编辑" {{action 'editProjectForm' treeValue}}></i></a></td>
+          {{/if}}
+            {{#if session.isOrigin}}
+              <td><a><p>暂无操作权限</p></a></td>
+            {{/if}}
+            {{#if session.isTeamLeader}}
+              <td><a><p>暂无操作权限</p></a></td>
+            {{/if}}
+          </tr>
+        {{/each}}
+
+        </tbody>
+      </table>
+    </div>
+    <div class="page-bar">
+      <div class="filtered-info span4">
+        <label>当前为第{{currentPage}}页<a href="#"></a></label>
+      </div>
+      <div class="selected-hosts-info span4"></div>
+      <div class="items-on-page">
+        <label>{{t 'common.show'}}:
+          <select id="list-status" class="form-control-2" name="pagesize" onchange={{action "refreshPageSize"}}>
+            <option value="10">10</option>
+            <option value="50">50</option>
+            <option value="100">100</option>
+          </select>
+        </label>
+      </div>
+      <div class="info">{{beginShowItem}}-{{endShowItem}} of {{loadDataLength}}</div>
+      <div class="paging_two_button">
+        <a class='paginate_previous' {{action 'pageDown'}} ><i class="glyphicon glyphicon-arrow-left" ></i></a>
+        <a class='paginate_next' {{action 'pageUp'}}><i class="glyphicon glyphicon-arrow-right"></i></a>
+      </div>
+    </div>
+  </div>
+</div>
+
+
+
+
+{{#pmo-modal modalId ="addProjectForm" errorInfo=errorInfo  hEvent='submitComputerAdd' }}
+  <div class="modal-header" >
+    <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+    <h4 class="modal-title">添加项目</h4>
+  </div>
+
+  <div class="modal-body form-modal">
+    <div class="col-lg-12 col-md-12">
+      <form role="form" id="addComputerFormId">
+        <div class="form-group col-lg-6 col-md-6">
+          <label>合同编号：</label>
+          {{input value=ip class="form-control"}}
+        </div>
+        <div class="form-group col-lg-6 col-md-6">
+          <label>项目编号：</label>
+          {{input value=mIp class="form-control"}}
+        </div>
+        <div class="form-group col-lg-6 col-md-6">
+          <label>项目名称：</label>
+          {{input value=cpu class="form-control"}}
+        </div>
+        <div class="form-group col-lg-6 col-md-6">
+          <label>销售经理邮箱：</label>
+          {{input value=memory class="form-control"}}
+        </div>
+        <div class="form-group col-lg-6 col-md-6">
+          <label>项目经理邮箱：</label>
+          {{input value=disk class="form-control"}}
+        </div>
+        <div class="form-group col-lg-6 col-md-6">
+          <label>研发经理邮箱：</label>
+          {{input value=os class="form-control"}}
+        </div>
+
+        <div class="form-group col-lg-6 col-md-6">
+          <label>项目金额（单位：元）：</label>
+          {{input value=os class="form-control"}}
+        </div>
+        <div class="form-group col-lg-6 col-md-6">
+          <label>已收入（单位：元）：</label>
+          {{input value=os class="form-control"}}
+        </div>
+        <div class="form-group col-lg-6 col-md-6">
+          <label>待收入（单位：元）：</label>
+          {{input value=userEmail class="form-control"}}
+        </div>
+        <div class="form-group col-lg-6 col-md-6">
+          <label>项目类型：</label>
+          <select id="computerType"  class="form-control">
+            <option value="产品销售类">产品销售类</option>
+            <option value="集成服务类">集成服务类</option>
+            <option value="解决方案类">解决方案类</option>
+            <option value="软件研发类">软件研发类</option>
+            <option value="支撑服务类">支撑服务类</option>
+            <option value="咨询服务类">咨询服务类</option>
+            <option value="资源服务类">资源服务类</option>
+          </select>
+        </div>
+        <div class="form-group col-lg-6 col-md-6">
+          <label>客户名称</label>
+          {{input value=userEmail class="form-control"}}
+        </div>
+
+        <div class="form-group col-lg-6 col-md-6">
+          <label>牵头部门</label>
+          {{input value=userEmail class="form-control"}}
+        </div>
+        <div class="form-group col-lg-6 col-md-6">
+          <label>项目阶段</label>
+          {{input value=userEmail class="form-control"}}
+        </div>
+        <div class="form-group col-lg-6 col-md-6">
+          <label>商务状态</label>
+          {{input value=userEmail class="form-control"}}
+        </div>
+        <div class="form-group col-lg-6 col-md-6">
+          <label>节点数</label>
+          {{input value=userEmail class="form-control"}}
+        </div>
+
+        <div class="form-group col-lg-6 col-md-6">
+          <label>所属区域</label>
+          {{input value=userEmail class="form-control"}}
+        </div>
+        <div class="form-group col-lg-6 col-md-6">
+          <label>省份</label>
+          {{input value=userEmail class="form-control"}}
+        </div>
+        <div class="form-group col-lg-6 col-md-6">
+          <label>协办部门</label>
+          {{input value=userEmail class="form-control"}}
+        </div>
+        <div class="form-group col-lg-6 col-md-6">
+          <label>合同额拆分状态</label>
+          {{input value=userEmail class="form-control"}}
+        </div>
+
+
+        <div class="form-group col-lg-6 col-md-6">
+          <label>使用到的产品：</label>
+          {{textarea value=useDetail class="form-control" rows="3"}}
+        </div>
+      </form>
+    </div>
+  </div>
+{{/pmo-modal}}
+
+{{#pmo-modal modalId ="editProjectForm" editProject=editProject errorInfo=errorInfo  hEvent='doEditProject' }}
+  <div class="modal-header" >
+    <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+    <h4 class="modal-title">编辑项目</h4>
+  </div>
+
+  <div class="modal-body form-modal">
+    <div class="col-lg-12 col-md-12">
+      <form role="form" id="addComputerFormId">
+        <div class="form-group col-lg-6 col-md-6">
+          <label>合同编号：</label>
+          {{input value=editProject.contractId class="form-control"}}
+        </div>
+        <div class="form-group col-lg-6 col-md-6">
+          <label>项目编号：</label>
+          {{input value=editProject.projectId class="form-control"}}
+        </div>
+        <div class="form-group col-lg-6 col-md-6">
+          <label>项目名称：</label>
+          {{input value=editProject.projectName class="form-control"}}
+        </div>
+        <div class="form-group col-lg-6 col-md-6">
+          <label>销售经理邮箱：</label>
+          {{input value=editProject.salesmaneEmail class="form-control"}}
+        </div>
+        <div class="form-group col-lg-6 col-md-6">
+          <label>项目经理邮箱：</label>
+          {{input value=editProject.projectManagerEmail class="form-control"}}
+        </div>
+
+        <div class="form-group col-lg-6 col-md-6">
+          <label>项目金额（单位：元）：</label>
+          {{input value=editProject.projectPrice class="form-control"}}
+        </div>
+        <div class="form-group col-lg-6 col-md-6">
+          <label>已收入（单位：元）：</label>
+          {{input value=editProject.getMoney class="form-control"}}
+        </div>
+        <div class="form-group col-lg-6 col-md-6">
+          <label>待收入（单位：元）：</label>
+          {{input value=editProject.leftMoney class="form-control"}}
+        </div>
+        <div class="form-group col-lg-6 col-md-6">
+          <label>项目类型：</label>
+          {{#x-select value=editProject.projectType action="categoryChanged"  as |xs|}}
+            {{#xs.option value='产品销售类'}}产品销售类{{/xs.option}}
+            {{#xs.option value='集成服务类'}}集成服务类{{/xs.option}}
+            {{#xs.option value='解决方案类'}}解决方案类{{/xs.option}}
+            {{#xs.option value='软件研发类'}}软件研发类{{/xs.option}}
+            {{#xs.option value='支撑服务类'}}支撑服务类{{/xs.option}}
+            {{#xs.option value='咨询服务类'}}咨询服务类{{/xs.option}}
+            {{#xs.option value='资源服务类'}}资源服务类{{/xs.option}}
+          {{/x-select}}
+        </div>
+        <div class="form-group col-lg-6 col-md-6">
+          <label>客户名称</label>
+          {{input value=editProject.customer class="form-control"}}
+        </div>
+
+        <div class="form-group col-lg-6 col-md-6">
+          <label>牵头部门</label>
+          {{input value=editProject.leadDepartment class="form-control"}}
+        </div>
+        <div class="form-group col-lg-6 col-md-6">
+          <label>项目阶段</label>
+          {{input value=editProject.projectStage class="form-control"}}
+        </div>
+        <div class="form-group col-lg-6 col-md-6">
+          <label>商务状态</label>
+          {{input value=editProject.businessStatus class="form-control"}}
+        </div>
+        <div class="form-group col-lg-6 col-md-6">
+          <label>节点数</label>
+          {{input value=editProject.nodeCount class="form-control"}}
+        </div>
+
+        <div class="form-group col-lg-6 col-md-6">
+          <label>所属区域</label>
+          {{input value=editProject.areaBelong class="form-control"}}
+        </div>
+        <div class="form-group col-lg-6 col-md-6">
+          <label>省份</label>
+          {{input value=editProject.province class="form-control"}}
+        </div>
+        <div class="form-group col-lg-6 col-md-6">
+          <label>协办部门</label>
+          {{input value=editProject.assistDepartment class="form-control"}}
+        </div>
+        <div class="form-group col-lg-6 col-md-6">
+          <label>合同额拆分状态</label>
+          {{input value=editProject.spitStatus class="form-control"}}
+        </div>
+
+
+        <div class="form-group col-lg-6 col-md-6">
+          <label>使用到的产品：</label>
+          {{textarea value=editProject.usedProduct class="form-control" rows="3"}}
+        </div>
+        <div class="form-group col-lg-6 col-md-6">
+          <label>项目研发，测试人员：</label>
+          {{textarea value=editProject.developerEmail placehoulder='参与项目人员以逗号分隔' class="form-control" rows="3"}}
+        </div>
+
+      </form>
+    </div>
+  </div>
+{{/pmo-modal}}
+
+
+
+{{#pmo-modal modalId ="addSomeProjectForm" errorInfo=errorInfo hEvent='submitExclData' }}
+  <div class="modal-header" >
+    <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+    <h4 class="modal-title">批量导入机器</h4>
+  </div>
+  <h5 class=" warning-word col-lg-12 col-md-12">注意：导入的excl格式如下所示，且导入的是第一张sheet的内容。</h5>
+  <div class="modal-body">
+    <div class="row">
+      <div class="col-lg-12 col-md-12">
+        <table class="table-striped table-bordered table-health-report">
+          <thead>
+          <tr>
+            <th>合同编号</th>
+            <th>项目编号</th>
+            <th>项目名称</th>
+            <th>销售经理邮箱</th>
+            <th>项目经理邮箱</th>
+            <th>项目干系人</th>
+            <th>项目类型</th>
+            <th>项目金额（单位：元）</th>
+            <th>已收入</th>
+            <th>待收入</th>
+            <th>客户名称</th>
+            <th>牵头部门</th>
+            <th>所属区域</th>
+            <th>项目阶段</th>
+            <th>商务状态</th>
+            <th>使用到的产品</th>
+            <th>节点数</th>
+            <th>省份</th>
+            <th>协办部门</th>
+            <th>合同额拆分状态</th>
+          </tr>
+          </thead>
+          <tbody>
+          <tr>
+            <td>01-2017-046</td>
+            <td>C201785-018</td>
+            <td>在线2017年hadoop维保项目</td>
+            <td>施胜杰</td>
+            <td>谢晶</td>
+            <td>谢晶.</td>
+            <td>支撑服务类</td>
+            <td>1200000.00</td>
+            <td></td>
+            <td></td>
+            <td>中移在线服务有限公司</td>
+            <td>大数据产品部</td>
+            <td>西部</td>
+            <td></td>
+            <td></td>
+            <td></td>
+            <td></td>
+            <td>在线公司</td>
+            <td></td>
+            <td>已拆分</td>
+          </tr>
+          </tbody>
+        </table>
+
+      </div>
+    </div>
+    <div class="row" >
+      <div class="col-lg-12">
+        {{file-upload url="?m=Project&a=addProjectExcl" class="input-file"}}
+      </div>
+    </div>
+  </div>
+{{/pmo-modal}}

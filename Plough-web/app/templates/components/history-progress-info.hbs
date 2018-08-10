@@ -1,0 +1,22 @@
+<div class="info-content">
+  {{!-- 本周状态 --}}
+    {{#if modified0}}
+      {{progress-week-amend toModify0 = "modify0" toUploadData = "uploadData" progressInfo =firstWeekInfo mockId=0 upload=upload}}
+    {{else}}
+      {{progress-week-show toModify0 = "modify0" progressInfo =firstWeekInfo mockId=0 ableToModify0=true}}
+    {{/if}}
+  {{!-- 上周状态 --}}
+    {{#if modified1}}
+      {{progress-week-amend toModify1 = "modify1" toUploadData = "uploadData" progressInfo =secondWeekInfo mockId=1}}
+    {{else}}
+      {{progress-week-show toModify1 = "modify1" progressInfo =secondWeekInfo mockId=1 ableToModify1=true}}
+    {{/if}}
+
+
+  {{!-- 之前状态展示 --}}
+  {{#each beforeWeekInfo as |info index|}}
+       {{!-- {{progress-week-show currentWeek = false progressInfo = info mockId = index  timeShow=updateTime}} --}}
+      {{progress-week-show progressInfo = info mockId = (real-index index)}}
+
+  {{/each}}
+</div>

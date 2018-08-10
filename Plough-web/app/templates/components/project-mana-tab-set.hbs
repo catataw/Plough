@@ -1,0 +1,3 @@
+{{#each _tabs as |_tab|}}
+<li class = {{if (equal-bool _tab.startLine activeTab) 'active'}} {{action 'setTable' _tab.startLine}}>{{_tab.name}}</li>
+{{/each}}

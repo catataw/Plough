@@ -1,0 +1,38 @@
+{{#if isStatic}}
+<tr>
+<td >{{reduce-content showItem.mailstoneName 8}}</td>
+        <td>{{showItem.weight}} </td>
+        <td>{{showItem.planFinishedTime}}</td>
+        <td>{{reduce-content showItem.deliverable 10}}</td>
+        <td>{{showItem.status}}</td>
+        <td>{{reduce-content showItem.arrivalConfirmation 8}}</td>
+        <td>{{showItem.actualFinishedTime}}</td>
+       {{#if deleteStatus}}
+         <img margin-top="7px" width="22" height="22x" onclick={{action "doDelete"}} src=".{{rootUrl}}/imgs/icon_confirm.png" alt="确定">
+         <img margin-top="7px" width="17px" height="17px" onclick={{action "cancleDelete"}} src=".{{rootUrl}}/imgs/icon_cancle.png" alt="取消">
+       {{else}}
+        <img width="18px" height="18px" onclick={{action "edit"}} src=".{{rootUrl}}/imgs/icon_edit.png" alt="编辑">
+        <img width="18px" height="18px" onclick={{action "delete"}} src=".{{rootUrl}}/imgs/icon_delete.png" alt="删除">
+        {{/if}}
+</tr>
+
+{{else}}
+<tr>
+        <td >{{db-click-edit class='input-control vertical-line' Value=showItem.mailstoneName}}</td>
+        <td>{{db-click-edit class='input-control vertical-line' Value=showItem.weight}} </td>
+          <td>{{bfs-datepicker startTime=StartDate Value=showItem.planFinishedTime}}</td>
+        {{!-- <td>{{date-picker date=showItem.planFinishedTime valueFormat='YYYY-MM-DD' class='input-control'}}</td> --}}
+        <td>{{db-click-edit class='input-control vertical-line' Value=showItem.deliverable}}</td>
+        <td>{{#x-select class="sc-select" value=showItem.status on-change=(action (mut showItem.status)) as |xs|}}
+             {{#xs.option value='已完成'}}已完成{{/xs.option}}
+             {{#xs.option value='进行中'}}进行中{{/xs.option}}
+             {{#xs.option value='未开始'}}未开始{{/xs.option}}
+          {{/x-select}}</td>
+        <td>{{db-click-edit class='input-control vertical-line' Value=showItem.arrivalConfirmation}}</td>
+         <td>{{bfs-datepicker startTime=StartDate Value=showItem.actualFinishedTime}}</td>
+        {{!-- <td>{{date-picker date=showItem.actualFinishedTime valueFormat='YYYY-MM-DD' class='input-control'}}</td> --}}
+      
+        <img margin-top="7px" width="22" height="22x" onclick={{action "confirm"}} src=".{{rootUrl}}/imgs/icon_confirm.png" alt="确定">
+        <img margin-top="7px" width="17px" height="17px" onclick={{action "cancle"}} src=".{{rootUrl}}/imgs/icon_cancle.png" alt="取消">
+      </tr>
+{{/if}}

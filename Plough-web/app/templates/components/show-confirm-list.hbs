@@ -1,0 +1,28 @@
+{{#if isStatic}}
+<tr>
+        <td >{{showItem.confirmProgressTime}}</td>
+        <td >{{showItem.confirmTax}} </td>
+        <td>{{showItem.textRate}}</td>
+        <td>{{showItem.confirmNoTax}}</td>
+        <td>{{showItem.confirmedProgress}}</td>
+         {{#if deleteStatus}}
+           <img margin-top="7px" width="22" height="22x" onclick={{action "doDelete"}} src=".{{rootUrl}}/imgs/icon_confirm.png" alt="确定">
+           <img margin-top="7px" width="17px" height="17px" onclick={{action "cancleDelete"}} src=".{{rootUrl}}/imgs/icon_cancle.png" alt="取消">
+         {{else}}
+          <img width="18px" height="18px" onclick={{action "edit"}} src=".{{rootUrl}}/imgs/icon_edit.png" alt="编辑">
+          <img width="18px" height="18px" onclick={{action "delete"}} src=".{{rootUrl}}/imgs/icon_delete.png" alt="删除">
+         {{/if}}
+      </tr>
+
+{{else}}
+<tr>
+        <td>{{bfs-datepicker startTime=StartDate Value=showItem.confirmProgressTime}}</td>
+         {{!--  {{date-picker date=showItem.confirmProgressTime valueFormat='YYYY-MM-DD' class='input-control'}} --}}
+        <td >{{db-click-edit class='input-control' Value=showItem.confirmTax}}</td>
+        <td>{{db-click-edit class='input-control' Value=showItem.textRate}}</td>
+        <td>{{db-click-edit class='input-control' Value=showItem.confirmNoTax}}</td>
+        <td>{{db-click-edit class='input-control' Value=showItem.confirmedProgress}}</td>
+        <img margin-top="7px" width="22" height="22x" onclick={{action "confirm"}} src=".{{rootUrl}}/imgs/icon_confirm.png" alt="确定">
+        <img margin-top="7px" width="17px" height="17px" onclick={{action "cancle"}} src=".{{rootUrl}}/imgs/icon_cancle.png" alt="取消">
+      </tr>
+  {{/if}}

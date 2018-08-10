@@ -1,0 +1,42 @@
+<div class="row">
+  <div>
+    <p class="page-header pmo-header title-p">物理机管理-物理机占用概况</p>
+  </div>
+</div>
+
+<div class="report"  id="report-detail">
+  <div class="row report-header">
+    <span>{{formatted-date currentTime 'YYYY-MM-DD HH:mm:ss'}}</span>
+  {{#if session.isSuper}}
+    <li title="导出excl" class="icon-add glyphicon glyphicon-download-alt" {{action 'downLoadExcl'}}></li>
+  {{/if}}
+  </div>
+
+  <h3>{{t 'check.summary'}}:</h3>
+  <row>
+    <div class="col-lg-12 col-md-12 report-error-info">
+      <p class="col-lg-2 col-md-2">总物理机数:<span class="warning-word">{{survey.totalComputerCount}} </span></p>
+      <p class="col-lg-2 col-md-2">剩余物理机总数:<span class="warning-word">{{survey.leftComputerCount}}</span></p>
+      <p class="col-lg-2 col-md-2">长期用机总数:<span class="warning-word">{{survey.longComputerCount}}</span></p>
+      <p class="col-lg-2 col-md-2">临时用机总数:<span class="warning-word">{{survey.tmpComputerCount}}</span></p>
+      <p class="col-lg-2 col-md-2">近月可回收机器数:<span class="warning-word">{{survey.backInMonthCount}}</span></p>
+    </div>
+  </row>
+  <div class="clear"></div>
+  <h3>物理机分布图</h3>
+  <row>
+    <div class="col-lg-12 col-md-12 dashboard-widget" data="mydata">
+      {{team-used-machine}}
+    </div>
+
+    <div class="two-widget dashboard-widget">
+          {{department-used-machine}}
+    </div>
+
+    <div class="two-widget dashboard-widget margin6">
+      {{apply-machine}}
+    </div>
+
+  </row>
+  <div class="clear"></div>
+</div>

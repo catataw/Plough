@@ -1,0 +1,41 @@
+<div class="report"  id="report-detail">
+  <div class="row back-header">
+    <div><a class="paginate_previous" ><i class="glyphicon glyphicon-arrow-left" ></i></a>{{#link-to 'reports'}}<span>{{t 'common.back'}}</span>{{/link-to}}</div>
+  </div>
+  <div class="row report-header pmo-header">
+    <span>ffff</span>
+    <img class="action-img" {{action 'downLoadExcl'}} src=".{{rootUrl}}imgs/icon_excel.png">
+
+    <img class="hide action-img"  src=".{{rootUrl}}imgs/icon_word.png">
+  </div>
+  <div class="row report-info">
+    <label>{{t 'check.type'}}:</label><span></span>
+    <label>{{t 'check.start.time'}}:</label><span></span>
+    <label>{{t 'check.end.time'}}:</label><span></span>
+  </div>
+  <h3>{{t 'check.summary'}}:</h3>
+  <row>
+    <div class="col-lg-12 col-md-12 report-error-info">
+      <span class="block-span">{{t 'check.common.status'}}:</span>
+      <div class="clear"></div>
+      <p>{{t 'check.unhealthy.items'}}:</p>
+
+      <a href="#" >teststt</a>
+
+    </div>
+  </row>
+  <div class="clear"></div>
+  <h3>{{t 'check.cluster.rate'}}</h3>
+  <row>
+    <div class="dashboard-widget">
+
+    </div>
+    <div class="dashboard-widget center-widget" data="mydata">
+
+    </div>
+    <div class="dashboard-widget">
+
+    </div>
+  </row>
+  <div class="clear"></div>
+</div>

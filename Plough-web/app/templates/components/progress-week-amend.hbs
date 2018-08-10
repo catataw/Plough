@@ -1,0 +1,75 @@
+  <div class="week-info inline">
+    <div class="time"> {{if firstWeek "本周" "上周"}}</div>
+    <div>
+    {{#if firstWeek}}
+      <div>
+        <img src=".{{rootUrl}}/imgs/icon_circle_bottom_line.svg" alt="">
+      </div>
+    {{else}}
+      <div>
+        <img src=".{{rootUrl}}/imgs/icon_circle_full_line.svg" alt="">
+      </div>
+    {{/if}}
+
+   
+    </div>
+
+    <div class="form-chart">
+      {{!-- 进度bar --}}
+      <div>
+        <span class="red-word">*</span>
+        <span>进度：</span>
+        <span>{{progressInfo.process}}%</span>
+         {{progress-slider value=progressInfo.process action=(action "updateSaturation")}}
+      </div>
+      {{!-- textarea --}}
+      <div>
+        <div>
+          <span>当前风险度：</span>
+          {{#x-select value=progressInfo.risk class="xs-select" on-change = (action (mut progressInfo.risk)) as |xs|}}
+            {{#xs.option value="高"}}高{{/xs.option}}
+            {{#xs.option value="中"}}中{{/xs.option}}
+            {{#xs.option value="低"}}低{{/xs.option}}
+          {{/x-select}}
+        </div>
+        <div>
+          <span>当前风险即应对措施：</span>
+          {{textarea value=progressInfo.responseMeasures class = "text-area"}}
+        </div>
+        <div>
+          <span>当前进展：</span>
+          {{textarea value=progressInfo.currentProgress class = "text-area"}}
+        </div>
+        <div>
+          <span>近期计划：</span>
+          {{textarea value=progressInfo.recentPlan class = "text-area"}}
+        </div>
+      </div>
+    </div>
+    {{#if firstWeek}}
+      {{#if upload}}
+        <div>
+          <a href="javascript:void(0)" {{action "uploadData"}} style="margin-left:20px;color:#107CD6">提交</a>
+        </div>
+      {{else}}
+        <div>
+          <a href="javascript:void(0)" {{action "confirm0"}} style="margin-left:10px;color:#107CD6">确定</a>
+        </div>
+        <div>
+          <a href="javascript:void(0)" {{action "cancle0"}} style="margin-left:10px;color:#107CD6">取消</a>
+        </div>
+      {{/if}}
+    {{else}}
+        <div>
+          <a href="javascript:void(0)" {{action "confirm1"}} style="margin-left:10px;color:#107CD6">确定</a>
+        </div>
+        <div>
+          <a href="javascript:void(0)" {{action "cancle1"}} style="margin-left:10px;color:#107CD6">取消</a>
+        </div>
+     {{/if}}
+
+
+  </div>
+<div style="width:20px;height:20px;position:relative;left:103px;top:-1px">
+  <img src=".{{rootUrl}}/imgs/icon_circle_line.svg" alt="line">
+</div>

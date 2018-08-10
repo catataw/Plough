@@ -1,0 +1,306 @@
+{{#if session.isAuthenticated}}
+<div class="pmo-container">
+  <nav class="navbar navbar-default navbar-fixed-top navbar-inverse pmo-nav">
+    <div class="container content-container">
+      <div class="navbar-header">
+        <button type="button" class="navbar-toggle collapsed" data-toggle="collapse" data-target="#bs-example-navbar-collapse-1">
+          <span class="sr-only">Toggle navigation</span>
+          <span class="icon-bar"></span>
+          <span class="icon-bar"></span>
+          <span class="icon-bar"></span>
+          <div class="clear"></div>
+        </button>
+        <a class="navbar-brand" href="#">PMO管理工具</a>
+        <div class="clear"></div>
+      </div>
+
+      <div class="collapse navbar-collapse" id="bs-example-navbar-collapse-1">
+          <ul class="nav navbar-nav" >
+            <li class="dropdown">
+              <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-expanded="false">机器管理 <span class="caret"></span></a>
+              <ul class="dropdown-menu" role="menu">
+                <li>
+                  {{#link-to 'dashbord-machine'}}
+                    资源概况
+                  {{/link-to}}
+                </li>
+                <li>
+                  {{#link-to 'used-machine'}}
+                    物机有主
+                  {{/link-to}}
+                </li>
+                <li>
+                  {{#link-to 'left-machine'}}
+                    待嫁物机
+                  {{/link-to}}
+                </li>
+                <li>
+                  {{#link-to 'computer-monitor'}}
+                    物机监控
+                  {{/link-to}}
+                </li>
+                <li>
+                  {{#link-to 'virtual-machine.used-vitual'}}
+                    在用虚拟机
+                  {{/link-to}}
+                </li>
+                <li>
+                  {{#link-to 'virtual-machine.user'}}
+                    租户管理
+                  {{/link-to}}
+                </li>
+                <li class="divider"></li>
+              </ul>
+            </li>
+
+
+      <!--
+      {{#if session.isSuper}}
+          <li class="dropdown">
+            <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-expanded="false">外协管理 <span class="caret"></span></a>
+            <ul class="dropdown-menu" role="menu">
+              <li>
+                {{#link-to 'employee-apply'}}
+                  外协申请
+                {{/link-to}}
+              </li>
+              <li>
+                {{#link-to 'used-employee'}}
+                  名花有主
+                {{/link-to}}
+              </li>
+              <li>
+                {{#link-to 'left-employee'}}
+                  外协审批
+                {{/link-to}}
+              </li>
+              <li>
+                {{#link-to 'employer-score'}}
+                  厂商考评
+                {{/link-to}}
+              </li>
+                <li>
+                  {{#link-to 'employee-dashboard'}}
+                    外协概况
+                  {{/link-to}}
+                </li>
+              <li class="divider"></li>
+            </ul>
+          </li>
+      {{/if}}
+       -->
+
+            <li class="dropdown">
+              <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-expanded="false">工作日志 <span class="caret"></span></a>
+              <ul class="dropdown-menu" role="menu">
+                <li>
+                  {{#link-to 'person-info'}}
+                    我的项目
+                  {{/link-to}}
+                </li>
+                <li>
+                  {{#link-to 'jobtime-write'}}
+                    工作日志填报（按天）
+                  {{/link-to}}
+                </li>
+                <li>
+                  {{#link-to 'job-time-weekday'}}
+                    工作日志填报（按周）
+                  {{/link-to}}
+                </li>
+                <li>
+                  {{#link-to 'new-project'}}
+                    报工项目列表
+                  {{/link-to}}
+                </li>
+                {{#if session.isSuper}}
+                  <li>
+                    {{#link-to 'worktime-check'}}
+                      部门工作记录检查
+                    {{/link-to}}
+                  </li>
+
+                {{/if}}
+                {{#if session.isAdmin}}
+                  <li>
+                    {{#link-to 'worktime-check'}}
+                      部门工作记录检查
+                    {{/link-to}}
+                  </li>
+                {{/if}}
+                {{#if session.isTeamLeader}}
+                  <li>
+                    {{#link-to 'worktime-check'}}
+                      小组工作记录检查
+                    {{/link-to}}
+                  </li>
+                {{/if}}
+                {{#if session.isBigTeamLeader}}
+                  <li>
+                    {{#link-to 'worktime-check'}}
+                      大组工作记录检查
+                    {{/link-to}}
+                  </li>
+                {{/if}}
+                <li class="divider"></li>
+              </ul>
+            </li>
+            {{#if session.isSuper}}
+              <li class="dropdown">
+                <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-expanded="false">经分数据<span class="caret"></span></a>
+                <ul class="dropdown-menu" role="menu">
+                  <li>
+                    {{#link-to 'pbug-eperate'}}
+                      缺陷管理
+                    {{/link-to}}
+                  </li>
+                  <li>
+                    {{#link-to 'complain'}}
+                      投诉管理
+                    {{/link-to}}
+                  </li>
+                  <li class="divider"></li>
+                </ul>
+              </li>
+            {{/if}}
+
+              <li class="dropdown">
+                <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-expanded="false">生产跟踪<span class="caret"></span></a>
+                <ul class="dropdown-menu" role="menu">
+                  <li>
+                    {{#link-to 'project.sol-project'}}
+                      项目清单
+                    {{/link-to}}
+                  </li>
+                  <li>
+                    {{#link-to 'project.change-history'}}
+                      项目割接
+                    {{/link-to}}
+                  </li>
+                  <li class="divider"></li>
+                </ul>
+              </li>
+
+            {{#if session.isSuper}}
+              <li class="dropdown">
+                <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-expanded="false">招聘管理<span class="caret"></span></a>
+                <ul class="dropdown-menu" role="menu">
+                  <li>
+                    {{#link-to 'recruit.demand-list'}}
+                      在招岗位
+                    {{/link-to}}
+                  </li>
+                  <li class="divider"></li>
+                </ul>
+              </li>
+            {{/if}}
+
+            <li class="dropdown">
+              <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-expanded="false">审计 <span class="caret"></span></a>
+              <ul class="dropdown-menu" role="menu">
+
+                <li>
+                  {{#link-to 'operate-logs'}}
+                    操作日志
+                  {{/link-to}}
+                </li>
+
+                <li>
+                  {{#link-to 'puser-manage'}}
+                    用户管理
+                  {{/link-to}}
+                </li>
+                <li>
+                  {{#link-to 'pteam-manage'}}
+                    小组管理
+                  {{/link-to}}
+                </li>
+                <li class="divider"></li>
+              </ul>
+            </li>
+
+
+            <div class="clear"></div>
+          </ul>
+
+
+        <ul class="nav navbar-nav navbar-right">
+          <li data-toggle="modal" data-target="#signin-signup-tab" id="signup-button"><a class="paddingR5	glyphicon glyphicon-user"></a></li>
+          <li data-toggle="modal" data-target="#signin-signup-tab" id="signup-button"><a class="paddingRl0"><span class="badge">{{userInfo.userName}}</span></a></li>
+          <li data-toggle="modal" data-target="#signin-signup-tab" id="signin-button"><a href="#"  {{action 'invalidateSession'}}><span class="badge badge-success">登出</span></a></li>
+          <li data-toggle="modal" data-target="#signin-signup-tab" id="signin-button"><a href="#" class="paddingRl0" {{action 'appEditUserForm'}}><span class="badge success">改密</span></a></li>
+          <div class="clear"></div>
+        </ul>
+        <div class="clear"></div>
+      </div>
+      <div class="clear"></div>
+    </div>
+  </nav>
+
+  <div class="container content-container">
+    <div class="content">
+    {{outlet}}
+    </div>
+  </div>
+
+  <footer>
+    <div class="container content-container">
+      <a href="/licenses/NOTICE.txt" target="_blank">内部网站，欢迎使用</a>
+    </div>
+  </footer>
+</div>
+{{else}}
+
+  <div class="container login-container">
+    <div class="content">
+      {{outlet}}
+    </div>
+  </div>
+
+{{/if}}
+
+{{#pmo-modal modalId ="appEditUserForm" userInfo=userInfo errorInfo=errorInfo hEvent='appUserEdit' }}
+  <div class="modal-header" >
+    <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+    <h4 class="modal-title">修改用户密码</h4>
+  </div>
+  <div class="modal-body form-modal">
+    <div class="col-lg-12 col-md-12">
+      <form role="form" id="addComputerFormId">
+
+
+        <div class="form-group col-lg-6 col-md-6">
+          <label>用户姓名：</label>
+          {{input  disabled="disabled"  value=userInfo.userName class="form-control"}}
+        </div>
+        <div class="form-group col-lg-6 col-md-6">
+          <label>用户密码：</label>
+          {{input value=userInfo.userPassword type="password" class="form-control"}}
+        </div>
+
+        <div class="form-group col-lg-6 col-md-6">
+          <label>用户权限</label>
+          {{#x-select value=userInfo.userType  disabled="disabled" as |xs|}}
+            {{#xs.option value='1'}}普通用户{{/xs.option}}
+            {{#xs.option value='2'}}超级用户{{/xs.option}}
+            {{#xs.option value='3'}}管理员用户{{/xs.option}}
+          {{/x-select}}
+        </div>
+
+        <div class="form-group col-lg-6 col-md-6">
+          <label>用户团队：</label>
+          {{input disabled="disabled"  value=userInfo.userTeam class="form-control"}}
+        </div>
+        <div class="form-group col-lg-6 col-md-6">
+          <label>用户公司邮箱：</label>
+          {{input disabled="disabled"  value=userInfo.userEmail class="form-control"}}
+        </div>
+      </form>
+    </div>
+  </div>
+{{/pmo-modal}}
+
+{{!-- 生产调度历史模态框 --}}
+{{#history-modal modalId = "history-info" class = 'page-history-modal' relatedId=relatedId}}
+{{!-- {{#history-modal modalId = "history-info" class = 'page-history-modal'}} --}}
+{{/history-modal}}

@@ -1,0 +1,63 @@
+<div class="row">
+  <div>
+    <p class="page-header pmo-header title-p">外协管理-{{employeeName}}考勤详情</p>
+  </div>
+</div>
+<div class="row">
+  <div class="col-md-4 col-lg-4">
+    <div class="form-group input-group">
+      {{date-picker date=writeTime valueFormat='YYYY-MM-DD' class="form-control"}}
+      <span class="input-group-btn">
+        <button class="btn btn-default" type="button"><i class="glyphicon glyphicon-zoom-in" {{action 'getAttendTime'}}></i>
+        </button>
+      </span>
+    </div>
+  </div>
+  <div class="col-md-8 col-lg-8">
+    {{#link-to 'used-employee' class="right-a" }}
+      <i class="glyphicon glyphicon-share-alt"></i><span>返回</span>
+    {{/link-to}}
+  </div>
+</div>
+
+
+<div class="row" id="report-list">
+  <div class="col-md-12 col-lg-12">
+    <div>
+
+      <table class="table table-bordered table-hover table-health-report">
+        <thead>
+        <tr>
+          <th class="col-md-1 col-lg-1 week-th">星期一</th>
+          <th class="col-md-1 col-lg-1 week-th">星期二</th>
+          <th class="col-md-1 col-lg-1 week-th">星期三</th>
+          <th class="col-md-1 col-lg-1 week-th">星期四</th>
+          <th class="col-md-1 col-lg-1 week-th">星期五</th>
+          <th class="col-md-1 col-lg-1 week-th">星期六</th>
+          <th class="col-md-1 col-lg-1 week-th">星期天</th>
+        </tr>
+        </thead>
+        <tbody>
+        {{#each weeks as |tree|}}
+          {{#if tree}}
+            <tr {{action 'writeTimeForm' tree}}>
+              {{#each tree as |treeValue|}}
+                {{#if treeValue.date}}
+                  <td>{{treeValue.date}} {{jobtime-bar  jobTime=treeValue.workTime}}</td>
+                {{else}}
+                  <td class="no-bg"></td>
+                {{/if}}
+              {{/each}}
+            </tr>
+          {{/if}}
+        {{/each}}
+        </tbody>
+      </table>
+    </div>
+  </div>
+  <div class="col-lg-offset-2 col-md-offset-2"></div>
+</div>
+
+
+
+

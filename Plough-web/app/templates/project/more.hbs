@@ -1,0 +1,342 @@
+<div class="row">
+  <div class="title-line">
+    <p class="pmo-header title-p">项目管理-项目列表</p>
+    <div class="end">
+      {{project-mana-search Val=searchValue}}
+      {{#if session.isSuper}}
+        {{#link-to 'project.add'}}
+        <div class="add-btn" title="添加项目"></div> 
+        {{/link-to}}
+      {{/if}}
+    </div>
+  </div>
+</div>
+
+
+
+
+<div class="row">
+  {{project-mana-list Datas = showData LookDetails='lookDetails' EditProjectForm='editProjectForm' toShowHistory="showHistory"}}
+</div>
+{{!-- 产品节点详情 --}}
+{{#pmo-modal modalId="look-details-pane"}}
+<div class="modal-header">
+  <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+    <span aria-hidden="true">&times;</span>
+  </button>
+  <h4 class="modal-title">产品节点详情（{{currentObj.projectName}})</h4>
+</div>
+<div class="modal-body form-modal">
+  <div class="row-line">
+    <label class="look-details-label">总结点数:</label>
+    <span class="look-details-total-num">{{currentObj.nodeCount}}</span>
+  </div>
+  <div>
+    <table class="table">
+      <thead>
+        <tr>
+          <th>项目名称</th>
+          <th>产品名称</th>
+          <th>版本</th>
+          <th>节点数</th>
+        </tr>
+      </thead>
+      <tbody>
+        {{#each productNodes as |node|}}
+        <tr>
+          <td><span class = "look-details-pane-alias">{{currentObj.projectAlias}}</span></td>
+          <td>{{node.productName}}</td>
+          <td>{{node.version}}</td>
+          <td>{{node.productNode}}</td>
+        </tr>
+        {{/each}}
+      </tbody>
+    </table>
+  </div>
+</div>
+{{/pmo-modal}}
+{{!-- {{partial 'project/more/edit'}} --}}
+{{#pmo-modal modalId="project-mana-edit-pane" hEvent='editProject' errorInfo = errorInfo click=(action "closeSelector")}}
+<div class="modal-header">
+    <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+        <span aria-hidden="true">&times;</span>
+    </button>
+    <h4 class="modal-title">编辑项目（{{projectEdit.projectName}}）</h4>
+</div>
+<div class="modal-body form-modal" >
+    <div class="col-lg-12 col-md-12">
+        <form role="form">
+            <div class="form-group col-lg-6 col-md-6 ">
+                <label><span class="edit-title">项目基本信息</span></label>
+            </div>
+            <div class="form-group col-lg-6 col-md-6" style="visibility:hidden;">
+                        <label></label>
+                        {{input value=addProject.projectId class="form-control"}}
+            </div>
+            <div class="form-group col-lg-6 col-md-6">
+                
+                <label><a  title="与市场服务系统保持一致（包括格式）" style="color:#ccc;"><span class="glyphicon glyphicon-question-sign"></span></a>项目编号/商机编号:</label>
+                {{input type="text" value = projectEdit.projectId class = "form-control" disabled="disabled"}}
+            </div>
+            <div class="form-group col-lg-6 col-md-6">
+                <label>合同编号:</label>
+                {{input type="text" value = projectEdit.contractNo class = "form-control"}}
+            </div>
+            <div class="form-group col-lg-6 col-md-6">               
+                <label>合同签订时间:</label>
+                {{date-picker date=projectEdit.signContractTime  valueFormat='YYYY-MM-DD' class="form-control"}}
+            </div>
+             <div class="form-group col-lg-6 col-md-6">
+                <label> 采购方式:</label>
+                {{#x-select value = projectEdit.purchaseType action="changePurchaseType"  as |xs|}}
+                {{#xs.option value="公开招标"}}公开招标{{/xs.option}}
+                {{#xs.option value="框架协议"}}框架协议{{/xs.option}}
+                {{#xs.option value="比选"}}比选{{/xs.option}}
+                {{#xs.option value="单一来源"}}单一来源{{/xs.option}}
+                {{/x-select}}
+            </div>
+            <div class="form-group col-lg-6 col-md-6">
+                <label><a  title="项目上线时间" style="color:#ccc;"><span class="glyphicon glyphicon-question-sign"></span></a>工期要求:</label>
+                {{date-picker date=projectEdit.onlineTime valueFormat='YYYY-MM-DD' class="form-control"}}
+            </div>
+            <div class="form-group col-lg-6 col-md-6">
+                <label><a  title="以合同为准" style="color:#ccc;"><span class="glyphicon glyphicon-question-sign"></span></a>项目名称:</label>
+                {{input value = projectEdit.projectName type="text" class = "form-control" disabled="disabled"}}
+            </div>
+            <div class="form-group col-lg-6 col-md-6">
+                <label> <span class="red-word">*</span><a title="项目通称/别名" style="color:#ccc;"><span class="glyphicon glyphicon-question-sign"></span></a>项目通称:</label>
+                {{input value = projectEdit.projectAlias type="text" class = "form-control"}}
+            </div>
+            <div class="form-group col-lg-6 col-md-6">
+                <label> 项目类型:</label>
+                {{#x-select value=projectEdit.projectType action="changeProjectType"  as |xs|}}
+                {{#xs.option value="集团产品研发类"}}集团产品研发类{{/xs.option}}
+                {{#xs.option value="集团委托应用研发类"}}集团委托应用研发类{{/xs.option}}
+                {{#xs.option value="市场类(内部)"}}市场类(内部){{/xs.option}}
+                {{#xs.option value="市场类(外部)"}}市场类(外部){{/xs.option}}
+                {{/x-select}}
+            </div>
+            <div class="form-group col-lg-6 col-md-6">
+                <label>项目启动会时间:</label>
+                {{date-picker date=projectEdit.startTime  valueFormat='YYYY-MM-DD' class="form-control"}}
+            </div>
+            <div class="form-group col-lg-6 col-md-6">
+                <label> <a  title="划分标准请参考市场类项目管理办法" style="color:#ccc;"><span class="glyphicon glyphicon-question-sign"></span></a>项目级别:</label>
+                {{#x-select value=projectEdit.projectLevel action="changeProjectLevel" as |xs|}}
+                {{#xs.option value="重大"}}重大{{/xs.option}}
+                {{#xs.option value="重点"}}重点{{/xs.option}}
+                {{#xs.option value="一般"}}一般{{/xs.option}}
+                {{/x-select}}
+            </div>
+             <div class="form-group col-lg-6 col-md-6">
+                <label>项目分类:</label>
+                {{#x-select value=projectEdit.projectClassify action="changeProjectClassify"  as |xs|}}
+                {{#xs.option value="产品销售"}}产品销售{{/xs.option}}
+                {{#xs.option value="软件开发服务"}}软件开发服务{{/xs.option}}
+                {{#xs.option value="资源服务"}}资源服务{{/xs.option}}
+                {{#xs.option value="咨询服务"}}咨询服务{{/xs.option}}
+                {{#xs.option value="集成服务"}}集成服务{{/xs.option}}
+                {{#xs.option value="支撑服务"}}支撑服务{{/xs.option}}
+                {{/x-select}}
+            </div>
+    
+            <div class="form-group col-lg-6 col-md-6">
+                <label>项目金额:</label>
+                {{input value=projectEdit.projectPrice type="text" class = "form-control"}} 
+                {{input type = "checkbox" checked=isBuget change=(action "changeBudget")}}
+                 <span>预算</span>
+            </div>
+               
+           
+            <div class="form-group col-lg-6 col-md-6">
+                <label><span class="edit-title">客户侧信息</span></label>
+            </div>
+             <div class="form-group col-lg-6 col-md-6" style="visibility:hidden;">
+                        <label></label>
+                        {{input value=addProject.projectId class="form-control"}}
+            </div>
+            <div class="form-group col-lg-6 col-md-6">
+                <label><a title="集团客户填写公司简称，如贵州公司；外部客户填写公司全称" style="color:#ccc;"><span class="glyphicon glyphicon-question-sign"></span></a>公司名称:</label>
+                {{input value=projectEdit.customerName type="text" class = "form-control"}}
+            </div><div class="form-group col-lg-6 col-md-6">
+                <label>部门名称:</label>
+                {{input value=projectEdit.customerDepartmentName type="text" class = "form-control"}}
+            </div><div class="form-group col-lg-6 col-md-6">
+                <label>二级经理:</label>
+                {{input value=projectEdit.lever2Manager type="text" class = "form-control"}}
+            </div><div class="form-group col-lg-6 col-md-6">
+                <label>三级经理:</label>
+                {{input value=projectEdit.lever3Manager type="text" class = "form-control"}}
+            </div><div class="form-group col-lg-6 col-md-6">
+                <label>员工:</label>
+                {{input value=projectEdit.customerStaffName type="text" class = "form-control"}}
+            </div><div class="form-group col-lg-6 col-md-6">
+                <label>主要联系人:</label>
+                {{input value=projectEdit.customerPrimaryContact type="text" class = "form-control"}}
+            </div>
+
+
+            <div class="form-group col-lg-6 col-md-6">
+                <label><span class="edit-title">苏研侧信息</span></label>
+            </div>
+             <div class="form-group col-lg-6 col-md-6" style="visibility:hidden;">
+                        <label></label>
+                        {{input value=addProject.projectId class="form-control" }}
+            </div>
+            <div class="form-group col-lg-6 col-md-6">
+                <label><a  title="请勾选有人力投入的小组" style="color:#ccc;"><span class="glyphicon glyphicon-question-sign"></span></a>涉及小组:</label>
+                {{!-- <select value=projectEdit.teams onClick={{action "changeSelect"}} type="text" class = "form-control"></select> --}}
+                {{#x-select  value=projectEdit.teams click=(action "changeSelect") as |xs|}}
+                {{#xs.option value=projectEdit.teams}}{{projectEdit.teams}}{{/xs.option}}{{/x-select}}
+                <div id="team-selecter" class="teams-selecter">
+                    {{tree-selector
+                        useCheck=true
+                        showIcon=true 
+                        fixHeight=false
+                        treeObject=teamTreeObject
+                        zNodes=teamsTreeNodes
+                    toChecked='checkTeamOnAdd'
+                     }}
+                </div>
+            </div>
+            <div class="form-group col-lg-6 col-md-6">
+                <label>涉及区域:</label>
+                {{#x-select value=projectEdit.involvedRegion action="changeInvolvedRegion" as |xs|}}
+                {{#xs.option value="北支"}}北支{{/xs.option}}
+                {{#xs.option value="上支"}}上支{{/xs.option}}
+                {{#xs.option value="成支"}}成支{{/xs.option}}
+                {{#xs.option value="广支"}}广支{{/xs.option}}
+                {{/x-select}}
+            </div>
+            <div class="form-group col-lg-6 col-md-6">
+                <label>销售经理:</label>
+                {{input value=projectEdit.saleManager type="text" class = "form-control"}}
+            </div>
+            <div class="form-group col-lg-6 col-md-6">
+                <label>区域大项目经理:</label>
+                {{input value=projectEdit.areaProjectManager type="text" class = "form-control"}}
+            </div>
+            <div class="form-group col-lg-6 col-md-6">
+                <label>区域解决方案经理:</label>
+                {{input value=projectEdit.regionalSolManager type="text" class = "form-control"}}
+            </div>
+            <div class="form-group col-lg-6 col-md-6">
+                <label><span class="red-word">*</span>产品部项目经理:</label>
+                {{input value=projectEdit.projectManagerId type="text" class = "form-control"}}
+            </div>
+            <div class="form-group col-lg-6 col-md-6">
+                <label>实施经理:</label>
+                {{input value=projectEdit.implementManager type="text" class = "form-control"}}
+            </div>
+            <div class="form-group col-lg-6 col-md-6">
+                <label>研发经理:</label>
+                {{input value=projectEdit.developManager type="text" class = "form-control"}}
+            </div>
+            <div class="form-group col-lg-6 col-md-6">
+                <label>测试经理:</label>
+                {{input value=projectEdit.testManager type="text" class = "form-control"}}
+            </div>
+            <div class="form-group col-lg-6 col-md-6">
+                <label>服务经理:</label>
+                {{input value=projectEdit.serviceManager type="text" class = "form-control"}}
+            </div>
+        
+           <div class="form-group col-lg-6 col-md-6">
+                <label><span class="edit-title">项目节点数</span></label>
+            </div>
+            <div class="form-group col-lg-6 col-md-6" style="visibility:hidden;">
+                <label></label>
+                {{input value=addProject.projectId class="form-control"}}
+            </div>
+            <div class="form-group col-lg-6 col-md-6">
+                <label>总结点数:</label>
+                {{input value=projectEdit.nodeCount type="text" class = "form-control"}}
+            </div>
+           
+            <div class="form-group col-lg-6 col-md-6" style="visibility:hidden;">
+                  <label></label>
+                 {{input value=addProject.projectId class="form-control"}}
+            </div>
+            <div class="form-group col-lg-6 col-md-6">
+                <label>添加节点:</label>
+                {{#x-select value=addProduction.productName  action="changeAddProduction" as |xs|}}
+                    {{#xs.option value='大数据基础套件CMH'}}大数据基础套件CMH{{/xs.option}}
+                    {{#xs.option value='大数据应用迁移评估工具'}}大数据应用迁移评估工具{{/xs.option}}
+                    {{#xs.option value='透明访问工具'}}透明访问工具{{/xs.option}}
+                    {{#xs.option value='资源管理Infinite'}}资源管理Infinite{{/xs.option}}
+                    {{#xs.option value='统一监控BOMP'}}统一监控BOMP{{/xs.option}}
+                    {{#xs.option value='数据管理DM'}}数据管理DM{{/xs.option}}
+                    {{#xs.option value='数据稽核DQP'}}数据稽核DQP{{/xs.option}}
+                    {{#xs.option value='数据开放DOP'}}数据开放DOP{{/xs.option}}
+                    {{#xs.option value='集群管理HControl'}}集群管理HControl{{/xs.option}}
+                    {{#xs.option value='智能运维HSmart'}}智能运维HSmart{{/xs.option}}
+                    {{#xs.option value='Hybrid'}}Hybrid{{/xs.option}}
+                    {{#xs.option value='DPI'}}DPI{{/xs.option}}
+                    {{#xs.option value='SDTP'}}SDTP{{/xs.option}}
+                    {{#xs.option value='EBD'}}EBD{{/xs.option}}
+                    {{#xs.option value='RDS'}}RDS{{/xs.option}}
+                    {{#xs.option value='容器云管理平台'}}容器云管理平台{{/xs.option}}
+                    {{#xs.option value='漏扫工具'}}漏扫工具{{/xs.option}}
+                    {{#xs.option value='数字水印'}}数字水印{{/xs.option}}
+                    {{#xs.option value='BC-SE'}}BC-SE{{/xs.option}}
+                    {{#xs.option value='OA-Search'}}OA-Search{{/xs.option}}
+                    {{#xs.option value='知了'}}知了{{/xs.option}}
+                    {{#xs.option value='智库'}}智库{{/xs.option}}
+                    {{#xs.option value='舆情'}}舆情{{/xs.option}}
+                    {{#xs.option value='商情'}}商情{{/xs.option}}
+                    {{#xs.option value='垃圾短信'}}垃圾短信{{/xs.option}}
+                    {{#xs.option value='BDP'}}BDP{{/xs.option}}
+                    {{#xs.option value='BC-CrossData'}}BC-CrossData{{/xs.option}}
+                    {{#xs.option value='BC-ETL'}}BC-ETL{{/xs.option}}
+                    {{#xs.option value='BC-PDM'}}BC-PDM{{/xs.option}}
+                    {{#xs.option value='BC-Streaming'}}BC-Streaming{{/xs.option}}
+                    {{#xs.option value='BC-LogManager'}}BC-LogManager{{/xs.option}}
+                    {{#xs.option value='BC-Moleye'}}BC-Moleye{{/xs.option}}
+                    {{#xs.option value='BC-DAE'}}BC-DAE{{/xs.option}}
+                {{/x-select}}
+            </div>
+            <div class="form-group col-lg-3 col-md-3">
+                <span class="red-word">*</span>
+                {{input type="text" value=addProduction.productNode placeholder="节点数" class = "form-control width-95"}}
+            </div>
+            <div class="form-group col-lg-3 col-md-3">
+                <span class="red-word">*</span>
+                {{input type="text" value=addProduction.version placeholder="版本" class = "form-control width-95"}}
+                <span class="red-word">*</span>
+                <button class="btn btn-primary"  {{action '_addOneProduct'}}>+</button>
+            </div>
+        
+                
+             <div class="form-group col-lg-2 col-md-2" style="margin-left: 10%;margin-top: 1%;">
+                <label>已添加:</label>
+            </div>
+        <div class="form-group col-lg-10 col-md-10" style="margin-left: -12%;">
+            <table class="table table-hover table-health-report ">
+                <thead>
+                <tr>
+                    <th class="col-md-3 col-lg-3">产品名称</th>
+                    <th class="col-md-2 col-lg-3">版本</th>
+                    <th class="col-md-2 col-lg-3">节点数</th>
+                    <th class="col-md-1 col-lg-2">操作</th>
+                </tr>
+                 </thead>
+                <tbody style="overflow-y: scroll;">
+                     {{#each projectProducts as |treeValue|}}  
+                    <tr>
+                        <td>{{treeValue.productName}}</td>
+                        <td>{{treeValue.version}}</td>
+                        <td><p>{{treeValue.productNode}}</p></td>
+                        <td><a><i class="glyphicon glyphicon-trash" title="删除" {{action 'delProjectProducts' treeValue}}></i></a></td>
+                    </tr>
+                    {{/each}}
+                </tbody>
+            </table>
+      </div>
+    </form>
+    </div>
+</div>
+{{/pmo-modal}}
+
+{{!-- 生产调度历史模态框 --}}
+{{#history-modal modalId = "history-info" class = 'page-history-modal' relatedId=relatedId hClose='doCloseHistory'}}
+{{/history-modal}}

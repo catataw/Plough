@@ -1,0 +1,44 @@
+  <div class="week-info inline">
+    <div class="time" id={{mockId}}>
+      {{#if before}}
+        {{progressInfo.updateTime}}
+      {{else}}
+        {{if firstWeek "本周" "上周"}}
+      {{/if}}
+      </div>
+    <div>
+      {{!-- {{#if svgParams}}
+      {{#with (svg-params svgParams mockId) as |svgParam|}}
+      <svg width={{svgParam.width}} height={{svgParam.height}} xmlns="http://www.w3.org/2000/svg" xmlns:svg="http://www.w3.org/2000/svg">
+      <g>
+        <ellipse ry="10" rx="10" id={{mockId}} cy={{svgParam.cy}} cx="20" stroke-width="0" stroke="#000000" fill="#107cd6"/>
+        <line fill="none" stroke="#107cd6" stroke-width="2" stroke-dasharray="null" stroke-linejoin="null" stroke-linecap="null" x1="20" y1={{svgParam.y1}} x2="20" y2={{svgParam.y2}} id="svg_2"/>
+      </g>
+      </svg>
+      {{/with}}
+      {{/if}} --}}
+       <svg width={{svgParam.width}} height={{svgParam.height}} xmlns="http://www.w3.org/2000/svg" xmlns:svg="http://www.w3.org/2000/svg">
+      <g>
+        <ellipse ry="10" rx="10" id={{mockId}} cy={{svgParam.cy}} cx="20" stroke-width="0" stroke="#000000" fill="#107cd6"/>
+        <line fill="none" stroke="#107cd6" stroke-width="2" stroke-dasharray="null" stroke-linejoin="null" stroke-linecap="null" x1="20" y1={{svgParam.y1}} x2="20" y2={{svgParam.y2}} id="svg_2"/>
+      </g>
+      </svg>
+      
+    </div>
+     {{show-detail-content mockId=mockId progressInfo=progressInfo ableToModify0=ableToModify0 ableToModify1=ableToModify1 toDrawSvg="drawSvg" }}
+      {{#if ableToModify0}}
+    <div>
+      <a href="javascript:void(0)" class ="toamend" {{action "change0"}} style="margin-left:20px;color:#107CD6">修改</a>
+    </div>
+    {{/if}}
+     {{#if ableToModify1}}
+    <div>
+      <a href="javascript:void(0)" class ="toamend" {{action "change1"}} style="margin-left:20px;color:#107CD6">修改</a>
+    </div>
+    {{/if}}
+    </div>
+   
+    <div style="width:20px;height:20px;position:relative;left:103px;top:0px">
+      <img src=".{{rootUrl}}/imgs/icon_circle_line.svg" alt="line">
+    </div>
+

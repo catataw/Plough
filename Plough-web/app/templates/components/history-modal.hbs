@@ -1,0 +1,32 @@
+<div id="{{modalId}}" class="modal fade" data-backdrop="static" data-keyboard="false">
+  <div class="modal-dialog" style="width:100%" id="history-modal">
+    <div class="modal-content">
+      <div class="modal-header lineset-father" >
+        <button tyep="button" class="close center-control" data-dismiss="modal" aria-label="Close" {{action 'closeAndReset'}} aria-hidden="true">&times;</button>
+        <div class="modal-title">
+          <ul>
+            <li class="lineset-middle" ><a class={{if tabSwitch.itemStatus 'selectActive'}} href="javascript:void(0)" {{action "switch" "itemStatus"}}>项目状态</a></li>
+            <li class="lineset-middle"><a class={{if tabSwitch.itemProgress 'selectActive'}} href="javascript:void(0)" {{action "switch" "itemProgress"}}>项目进展</a></li>
+            <li class="lineset-middle"><a class={{if tabSwitch.repayment 'selectActive'}} href="javascript:void(0)" {{action "switch" "repayment"}}>里程与回款</a></li>
+          </ul>
+          <div class="clear"></div>
+        </div>
+      </div>
+      <div class="modal-body">
+          {{#if tabSwitch.itemStatus}}
+            {{history-status-info relatedId=relatedId _statusList=statusList toRefreshStatus="refreshStatus"}}
+          {{else if tabSwitch.itemProgress}}
+            {{history-progress-info relatedId=relatedId _projectProgressList=projectProgressList}}
+          {{else if tabSwitch.repayment}}
+            
+            {{history-mileage-info relatedId=relatedId _gatheringPlanList=gatheringPlanList _mailStoneList=mailStoneList _gatheringConfirmList=gatheringConfirmList toRefreshGatheringPlan='refreshGatheringPlan' torefreshMailStone='refreshMailStone' torefreshGatheringConfirm='refreshGatheringConfirm'  sumTax=sumTax}}
+     {{/if}}
+      </div>
+      {{!-- <div class="modal-footer">
+      </div> --}}
+    </div>
+  </div>
+</div>
+
+
+

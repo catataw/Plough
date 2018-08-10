@@ -1,0 +1,33 @@
+ {{#if isStatic}}
+  <tr>
+        <td>{{reduce-content showItem.gatheringCondition 10}}</td>
+        <td>{{showItem.gatheringTime}}</td> 
+        <td>{{showItem.tax}}</td>
+        <td>{{showItem.noTax}}</td>
+        <td>{{showItem.gatheringRate}}</td>
+       
+       {{#if deleteStatus}}
+         <img margin-top="7px" width="22" height="22x" onclick={{action "doDelete"}} src=".{{rootUrl}}/imgs/icon_confirm.png" alt="确定">
+         <img margin-top="7px" width="17px" height="17px" onclick={{action "cancleDelete"}} src=".{{rootUrl}}/imgs/icon_cancle.png" alt="取消">
+       {{else}}
+         <img width="18px" height="18px" onclick={{action "edit"}} src=".{{rootUrl}}/imgs/icon_edit.png" alt="编辑">
+         <img width="18px" height="18px" onclick={{action "delete"}} src=".{{rootUrl}}/imgs/icon_delete.png" alt="删除">
+       {{/if}}
+      </tr>
+  {{else}}
+  <tr>
+        <td>{{db-click-edit class='input-control' Value=showItem.gatheringCondition}}</td>
+
+         <td>{{bfs-datepicker startTime=StartDate Value=showItem.gatheringTime}}</td>
+         {{!-- {{date-picker date=showItem.gatheringTime valueFormat='YYYY-MM-DD' class='input-control'}} --}}
+        {{!-- </td>  --}}
+        <td>{{db-click-edit class='input-control' Value=showItem.tax}}</td>
+        <td>{{db-click-edit class='input-control' Value=showItem.noTax}}</td>
+        <td>{{db-click-edit class='input-control' Value=showItem.gatheringRate}}</td>
+    
+        
+        <img margin-top="7px" width="22" height="22x" onclick={{action "confirm"}} src=".{{rootUrl}}/imgs/icon_confirm.png" alt="确定">
+        <img margin-top="7px" width="17px" height="17px" onclick={{action "cancle"}} src=".{{rootUrl}}/imgs/icon_cancle.png" alt="取消">
+      </tr>
+{{/if}}
+

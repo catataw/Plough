@@ -1,0 +1,45 @@
+{{!-- 展示状态信息或者修改信息 --}}
+
+<div class="inline {{if modified "list-info" "additem"}}" onmouseover={{action "readyTochange"}} onmouseleave={{action "readyTochange"}}>
+  
+      
+
+    {{#if modified}}
+      <div class="time">{{status.updateTime}}</div>
+      <div>
+        <img src=".{{rootUrl}}/imgs/icon_circle{{unless modified "_long"}}.svg" alt="球">
+      </div>
+
+    <div class="list-item">
+        
+      <ul>
+        <li>商务状态：<span class={{itemColor.commerceStatus}}>{{status.commerceStatus}}</span></li>
+        <li>实施依据：<span class={{itemColor.implementBases}}>{{status.implementBases}}</span></li>
+        <li>实施状态：<span class={{itemColor.implementStatus}}>{{status.implementStatus}}</span></li>
+        <li>研发状态：<span class={{itemColor.developStatus}}>{{status.developStatus}}</span></li>
+        <li>上线状态：<span class={{itemColor.onlineStatus}}>{{status.onlineStatus}}</span></li>
+        <li>交维状态：<span class={{itemColor.operateStatus}}>{{status.operateStatus}}</span></li>
+      </ul>
+    </div>
+    <div class="amend">
+      {{#if readyChange}}
+      <a href="javascript:void(0)" {{action "modify"}}>修改</a>
+      {{/if}}
+    </div>
+    {{else}}
+      <div class="time modify-time">
+        {{!-- {{date-picker date=status.updateTime Format='YYYY-MM-DD' class="timeStyle"}} --}}
+          {{bfs-datepicker class="timeStyle" Value=status.updateTime}}
+          <img src=".{{rootUrl}}/imgs/icon_time.png" alt="日历">
+          <span>注：请选择状态实际发生的时间</span>
+      </div>
+      <div>
+        <img src=".{{rootUrl}}/imgs/icon_circle{{unless modified "_long"}}.svg" alt="球">
+      </div>
+
+    {{form-select status=status}}
+    <div style="text-align:right"><a href=""><span {{action "confirm"}}>确定</span></a></div>
+    <div style="text-align:right"><a href=""><span {{action "cancel"}}>取消</span></a></div>
+    {{/if}}
+
+  </div>
