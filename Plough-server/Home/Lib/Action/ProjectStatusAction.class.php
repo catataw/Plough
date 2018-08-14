@@ -94,7 +94,6 @@ class ProjectStatusAction extends Action {
             //  $latestStatus是最新id的项目状态
             $latestStatus = $Status->where('relatedId='.$data['relatedId'])->order('id desc')->limit(1)->select();
             $statusData = array(
-
                 'commerceStatus' =>$latestStatus[0]['commerceStatus'],
                 'implementBases' => $latestStatus[0]['implementBases'],
                 'developStatus' => $latestStatus[0]['developStatus'],
@@ -134,7 +133,33 @@ class ProjectStatusAction extends Action {
         }
     }
 
-
+    /**
+     * 删除项目状态
+     */
+     public function deleteStatus($id){
+         $status = M('project_status');
+         $relatedId = $status->where('id='.$id)->field("relatedId")->select();
+          if( $status->where('id='.$id)->delete()){
+              $latestStatus = $status->where('relatedId='.$relatedId[0]['relatedId'])->order('id desc')->limit(1)->select();
+              $LatestStatusData = array(
+                  'commerceStatus' => $latestStatus[0] ['commerceStatus'],
+                  'implementBases' => $latestStatus[0]['implementBases'],
+                  'developStatus' => $latestStatus[0]['developStatus'],
+                  'operateStatus' => $latestStatus[0]['operateStatus'],
+                  'implementStatus' =>$latestStatus[0]['implementStatus'],
+                  'onlineStatus' => $latestStatus[0]['onlineStatus']
+              );
+              $project = M('projects');
+              $project->where('id='.$latestStatus[0]['relatedId'])->save( $LatestStatusData);
+              //删除项目状态列表，更新日志
+              $logs = M ( 'logs_info' );
+              $logsData ['logDetail'] = date ( 'Y-m-d H:i:s' ) . ':' . session ( 'userName' ) . '删除编号为：'.$id.'的项目状态' ;
+              $logs->add ( $logsData );
+              $this->ajaxReturn(array(),'删除成功', 1);
+          }else{
+              $this->ajaxReturn(array(),'删除失败', 0);
+            }
+      }
 
 }
 
