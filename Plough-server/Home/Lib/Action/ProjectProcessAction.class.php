@@ -120,7 +120,18 @@ class ProjectProcessAction extends Action
      */
     public function deleteProcess($id){
         $process = M('project_process');
+        $relatedId = $process->where('id='.$id)->field("relatedId")->select();
         if($process->where('id='.$id)->delete()){
+            //子表同步至主表
+            $latestProcess = $process->where('relatedId='.$relatedId[0]['relatedId'])->order('id desc')->limit(1)->select();
+            $LatestProcessData = array(
+                'risk' => $latestProcess[0]['risk'],
+                'responseMeasures' => $latestProcess[0]['responseMeasures'],
+                'currentProgress' => $latestProcess[0]['currentProgress']
+            );
+            $projects = M('projects');
+            $projects->where('id='.$latestProcess[0]['relatedId'])->save( $LatestProcessData);
+            //保存日志
             $projects = M('projects');
             $projectName = $projects->where('id=' . $id)->field('projectName')->select();
             $logs = M('logs_info');
