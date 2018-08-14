@@ -103,8 +103,16 @@ class ProjectGatheringConfirmAction extends Action
     public function deleteGatheringConfirm($id)
     {
         $gathering = M('project_gathering_confirm');
+        $relatedId = $gathering->where('id='.$id)->field("relatedId")->select();
         if ($gathering->where('id=' . $id)->delete()) {
+            //子表同步至主表
+            $latestGathering = $gathering->where('relatedId='.$relatedId[0]['relatedId'])->order('id desc')->limit(1)->select();
+            $LatestGatheringData = array(
+                'confirmedProgress' => $latestGathering[0]['confirmedProgress'],
+            );
             $projects = M('projects');
+            $projects->where('id='.$latestGathering[0]['relatedId'])->save($LatestGatheringData);
+            //保存日志
             $projectName = $projects->where('id=' . $id)->field('projectName')->select();
             $logs = M('logs_info');
             $logsData ['logDetail'] = date('Y-m-d H:i:s') . ':' . session('userName') . '删除项目(' . $projectName[0]['projectName'] . ")收入确认信息";
