@@ -70,7 +70,7 @@ class ProjectStatusAction extends Action {
         $_rexp = array (
             'id'=>'/^[0-9]+$/',
             'commerceStatus'=>'/^(商机中|已立项|已谈判|已签约|已结项)?$/',
-            'implementBases'=>'/^(无|POC|合同|POC+合同)?$/',
+             'implementBases'=>'/^无|POC|合同|POC+合同$/',
             'developStatus'=>'/^(未开发|开发中|已完成)?$/',
             'operateStatus'=>'/^(未交维|自运维|已交维)?$/',
             'implementStatus'=>'/^(未实施|实施中|已完成)?$/',
