@@ -94,8 +94,17 @@ class ProjectMailstoneProgressAction extends Action
      */
     public function deleteMailStone($id){
         $mailstone = M('project_mailstone_progress');
+        $relatedId = $mailstone->where('id='.$id)->field("relatedId")->select();
         if($mailstone->where('id='.$id)->delete()){
+            //子表同步至主表
+            $latestMailStone = $mailstone->where('relatedId='.$relatedId[0]['relatedId'])->order('id desc')->limit(1)->select();
+            $LatestMailData = array(
+                'mailstoneName' => $latestMailStone[0]['mailstoneName'],
+                'planFinishedTime' => $latestMailStone[0]['planFinishedTime'],
+            );
             $projects = M('projects');
+            $projects->where('id='.$latestMailStone[0]['relatedId'])->save($LatestMailData);
+            //保存日志
             $projectName = $projects->where('id=' . $id)->field('projectName')->select();
             $logs = M('logs_info');
             $logsData ['logDetail'] = date('Y-m-d H:i:s') . ':' . session('userName') . '删除项目(' . $projectName[0]['projectName'] . ")里程碑信息";
