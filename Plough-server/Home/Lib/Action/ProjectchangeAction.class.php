@@ -35,7 +35,6 @@ class ProjectchangeAction extends Action{
         	$date = explode('.',$data['monday']);
         }
         $data['createTime'] = '2018-'.$date[0].'-'.$date[1];
-        
         $projectChangeHistory = M('project_change_history');
         if($projectChangeHistory->add($data)){
             $logs = M ( 'logs_info' );
@@ -109,7 +108,6 @@ class ProjectchangeAction extends Action{
                 $this->ajaxReturn(array(), '删除失败', 0);
             }
         }
-
     }
     /**
      * 获取变更信息
@@ -149,6 +147,7 @@ class ProjectchangeAction extends Action{
     	->order('createTime')
     	->limit(1)
     	->select();
+
     	//若无历史变更记录，以当前时间作为第一期
     	if(!$projectHistory[0]['createTime']){
     		$result[0]['monday'] = date('m.d',$this->this_monday());
@@ -232,7 +231,6 @@ class ProjectchangeAction extends Action{
 		$data = json_decode ( htmlspecialchars_decode ( $postData ), TRUE );
 		$project_change_history = M('project_change_history');
 		if($data['id']){
-			
 			$where['relatedId'] = $data['id'];
 			$where['isDelete'] = 1;
 			$projectHistory = $project_change_history
