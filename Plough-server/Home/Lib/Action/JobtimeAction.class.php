@@ -819,7 +819,6 @@ FROM `pmo_user_info`WHERE userTeam LIKE' . "'" . $teamName . "'" . 'GROUP BY use
 		$postData = file_get_contents ( "php://input" );
 		
 		$data = json_decode ( htmlspecialchars_decode ( $postData ), TRUE );
-		//var_dump($data);exit;
 		//验证数据合法性
 		$newprojectClass = new NewprojectAction();
 		$isPlatform = isPlatformUser($data['userName']);
@@ -1161,7 +1160,7 @@ FROM `pmo_user_info`WHERE userTeam LIKE' . "'" . $teamName . "'" . 'GROUP BY use
 			//如果是平台组，陈熹伟可以看全部
 			if(session('userName')=='陈熹伟'){
 				$users = M('user_info')
-				->query('select * from pmo_user_info where isDelete = 1 and userTeam like "大数据产品部/平台组%"');
+				->query('select * from pmo_user_info where isDelete = 1 and userTeam like "大数据产品部\-平台产品%"');
 			}else{
 				$users = M('user_info')
 				->query('select * from pmo_user_info where isDelete = 1 and userTeam ="'.session('userTeam').'"');
@@ -1304,6 +1303,11 @@ FROM `pmo_user_info`WHERE userTeam LIKE' . "'" . $teamName . "'" . 'GROUP BY use
 		} else {
 			//若无数据，填写为产品类项目
 			$project = $this->getProductProject($user ['userName']);
+			if(isWhitePeople($user ['userName'])||isSolMan($user ['userName'])){
+				$workType ='项目管理';
+			}else{
+				$workType ='开发';
+			}
 			$result [] = array (
 					'workerName' => $user ['userName'],
 					'date' => $date,
@@ -1311,7 +1315,7 @@ FROM `pmo_user_info`WHERE userTeam LIKE' . "'" . $teamName . "'" . 'GROUP BY use
 					'projectName' => getRealName ( $project['projectId'], $project['projectName'] ),
 					'workId' => $user ['workId'],
 					'projectId' => $project['projectId'],
-					'workType' => '项目管理' 
+					'workType' => $workType 
 			);
 		}
 		return $result;

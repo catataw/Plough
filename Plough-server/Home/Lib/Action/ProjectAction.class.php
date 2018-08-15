@@ -8,6 +8,7 @@ class ProjectAction extends Action {
 	
 	//更新总工时接口，凌晨3点自动运行
 	public function calculateWorkTime(){
+		set_time_limit(0);
 		$jobtime = M("job_time");
 		$projects = M ( 'projects' );
 		$data = $projects
@@ -15,17 +16,19 @@ class ProjectAction extends Action {
 			->select();
 		foreach ($data as $key=>$value){
 			$whereLW['projectId'] = $value['projectId'];
-			$whereLW['projectName'] = $value['projectName'];
+			//$whereLW['projectName'] = $value['projectName'];
 			$value['totalWorkTime'] = $jobtime
 			      ->where($whereLW)
 			      ->sum("workTime");
 			if($value['totalWorkTime']){
 				$projects->where($whereLW)->save($value);
 				$logs = M ( 'logs_info' );
-				$logsData ['logDetail'] = date ( 'Y-m-d H:i:s' ) . ':' .'同步项目工时(' . $value ['projectName'] . ")";
+				$logsData ['logDetail'] = date ( 'Y-m-d H:i:s' ) . ':' .'自动同步项目工时(' . $value ['projectName'] . ")";
 				$logs->add ( $logsData );
 			}
-		}	
+		}
+		echo 200;
+		exit ();
 	}
 	
 	
@@ -149,24 +152,25 @@ class ProjectAction extends Action {
                        ->where($whereF)
                        ->select(); 
         if($customFeild){
-        	$fieldSql = $customFeild[0]['customField'].',id';
+        	$fieldSql = 'id,'.$customFeild[0]['customField'];
         }
 
         $fieldSql?$fieldArr = explode(',',$fieldSql):null;
         //过滤出上周进展字段
         $arrProcess=array('process','risk','lastWeekProgress','recentPlan','responseMeasures');
-        
         if($fieldArr){
         	foreach ($arrProcess as $value){
         		$key = array_search($value,$fieldArr);
-        		if($key>=0&&$fieldArr[$key]){
+        		if($key>0&&$fieldArr[$key]){
         			$processFieldArr[] = $fieldArr[$key];
         			unset($fieldArr[$key]);
+        			unset($key);
         		}
         		$currentKey = array_search('currentProgress',$fieldArr);
-        		if($currentKey>=0&&$fieldArr[$currentKey]){
+        		if($currentKey>0&&$fieldArr[$currentKey]){
         			$currentField[0] = $fieldArr[$currentKey];
         			unset($fieldArr[$currentKey]);
+        			unset($currentKey);
         		}
         	}
         }else{
@@ -178,10 +182,10 @@ class ProjectAction extends Action {
         $projectField = implode(',',$fieldArr);
 
         //获取主表数据
-		/*
 		if(session('userEmail')!='zhangyujing@wx.bigcloudsys.com'&&session('userEmail')!='luoying321@139.com'){
 			if($userType==3||$userType==2||$userType==5||$userName=='赵欣'){
 				if($projectField){
+
 					$data = M ( 'projects' )
 					->field($projectField)
 					->where('risk !=""')
@@ -203,21 +207,11 @@ class ProjectAction extends Action {
 						->select();
 				}
 			}
-		}*/
-        if($projectField){
-        	$data = M ('projects' )
-        	->field($projectField)
-        	->where('risk !=""')
-        	->select();
-        }else{
-        	$data = M ('projects' )
-        	->where('risk !=""')
-        	->select();
-        }
+		}
 
 
 		foreach($data as $v){
-			$where['relatedId'] = $value['id'];
+			$where['relatedId'] = $v['id'];
 			$oneProjectProcess =  M('project_process')
 					->where($where)
 					->order('id desc')
@@ -226,17 +220,17 @@ class ProjectAction extends Action {
 
 			if($processFieldArr){
                 foreach ($processFieldArr as $key=>$value){
-                	$lastProcess[$value] = $oneProjectProcess[1][$value];
+                	$v[$value] = $oneProjectProcess[1][$value];
                 }
                 if(in_array('lastWeekProgress',lastWeekProgress)){
-                	$lastProcess['lastWeekProgress'] = $oneProjectProcess[1]['lastWeekProgress'];
+                	$v['lastWeekProgress'] = $oneProjectProcess[1]['lastWeekProgress'];
                 }
 			}
 			if($currentField){
-				$currentProgress['currentProgress'] =$oneProjectProcess[0]['currentProgress'];
+				$v['currentProgress'] =$oneProjectProcess[0]['currentProgress'];
+			}else{
+				$v['currentProgress'] = '';
 			}
-			
-
 			$productTypeCount = M("project_product")->where($where)->Count();
 			
 			if($v['planFinishedTime']){
@@ -255,7 +249,7 @@ class ProjectAction extends Action {
 			$v['planFinishedTime']=$v['planFinishedTime']?substr($v['planFinishedTime'],0,10):'';
 			$v['signContractTime']=$v['signContractTime']?substr($v['signContractTime'],0,10):'';
 			$v['onlineTime']=$v['onlineTime']?substr($v['onlineTime'],0,10):'';
-			$result[] = array_merge($v,$currentProgress?$currentProgress:array(),$lastProcess?$lastProcess:array());
+			$result[] = $v;
 		}
 
 		if($result){
@@ -1232,20 +1226,20 @@ class ProjectAction extends Action {
 				),
 				array (
 						'currentProgress',
-						'当前进展'
+						'上周进展'
 				),
 				
 				array (
 						'process',
-						'进度（%）0-100'
+						'截止上周进度（%）'
 				),
 				array (
 						'risk',
-						'当前风险度'
+						'上周风险度'
 				),
 				array (
 						'responseMeasures',
-						'当前风险及应对措施'
+						'上周风险及应对措施'
 				)
 			);
 		exportExcel( $xlsName, $xlsCell, $projects );

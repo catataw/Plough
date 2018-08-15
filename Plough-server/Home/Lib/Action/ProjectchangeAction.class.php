@@ -143,7 +143,9 @@ class ProjectchangeAction extends Action{
      */
     public function getAllTeam(){
     	$project_change_history = M('project_change_history');
+    	$where['isDelete'] = 1;
     	$projectHistory = $project_change_history
+    	->where($where)
     	->order('createTime')
     	->limit(1)
     	->select();

@@ -265,13 +265,16 @@ function getWhiteName()
     return array(
         '庞哲翀',
         '齐骥',
-        '赵立芬',
     	'方云',
     	'张红',
     	'陈佳瑜',
-    	'孙维亚',
-    	'朱明明',
-    	'石在辉'	
+		'孙维亚',
+		'朱明明',
+		'王振亚',
+		'赵欣',
+		'王宝晗',
+		'吴辉',
+		'段翔'
     );
 }
 
@@ -282,13 +285,20 @@ function isWhitePeople($userName){
 	$whitePeople = array(
         '庞哲翀',
         '齐骥',
-        '赵立芬',
     	'方云',
     	'张红',
     	'陈佳瑜',
 		'孙维亚',
 		'朱明明',
-		'石在辉'
+		'王振亚',
+		'赵欣',
+		'王宝晗',
+		'吴辉',
+		'段翔',
+		'孙小霞',
+		'于娴',
+		'方晓静'		
+						
     );
 	if(in_array($userName,$whitePeople)){
 		return true;
@@ -297,6 +307,19 @@ function isWhitePeople($userName){
 	}
 }
 
+/*
+ * 判断是否为方案经理
+ */
+function isSolMan($userName){
+	$user = M ( 'user_info' );
+	$where['userName'] = $userName;
+	$userInfo = $user->where($where)->select();
+	if(strpos($userInfo[0]['userTeam'],'项目')){
+		return true;
+	}else{
+		return false;
+	}
+}
 
 /**
  * 获取所在大组
@@ -321,14 +344,27 @@ function getBigTeamLeader($userName){
  * 是否为平台组
  */
 function isPlatformUser($userName){
-	$bigTeamLeader = getBigTeamLeader($userName);
-	if($bigTeamLeader){
-		if($bigTeamLeader == '王宝晗'){
-			return true;
-		}else{
-			return false;
-		}
+	$where['userName']= $userName;
+	$result = M ( 'user_info' )
+	 ->query('select id from pmo_user_info where userTeam like "大数据产品部\-平台产品%" and userName="'.$userName.'"');
+	if($result){
+		return true;
+	}else{
+		return false;
 	}
+}
+
+
+/**
+ * 获取平台组人员
+ */
+function getPlatformUser(){
+	//获取所在小组
+	$user = M ( 'user_info' );
+	$allPlatformUser = $user->query('select userName,userEmail,userTeam,workId from pmo_user_info where isDelete =1 and userTeam like "大数据产品部\-平台产品/%"');
+    if($allPlatformUser){
+    	return $allPlatformUser;
+    }
 }
 
 

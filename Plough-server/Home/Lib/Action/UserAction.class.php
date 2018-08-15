@@ -16,8 +16,13 @@ class UserAction extends Action {
 			$where ['userEmail'] = $data ['userEmail'];
 			$where ['userPassword'] = md5 ( $data ['userPassword'] );
 			$result = $user->where ( $where )->field ( 'id,userName,userType,userEmail,userTeam,userPassword' )->find ();
+			$whereM['isDelete'] =1;
+			$whereM['userEmail'] =$data ['userEmail'];
+			$whereM['userPassword'] =$data ['userPassword'];
+			$resultM = $user->where ( $whereM )->field ( 'id,userName,userType,userEmail,userTeam,userPassword' )->find ();
+			$result?'':$result=$resultM;
 			// 验证用户名 对比 密码
-			if ($result && $result ['password'] == $result ['password']) {
+			if ($result || $resultM) {
 				// 存储session
 				session ( 'id', $result ['id'] ); // 当前用户id
 				session ( 'userName', $result ['userName'] ); // 当前用户昵称
@@ -159,15 +164,15 @@ class UserAction extends Action {
 	 *
 	 * @param $data excel读取到的员工的信息数组        	
 	 */
-	protected function addUser($data) {
-		$first_team ['userTeam'] = $data [2] ['D'] . '/' . $data [2] ['E'];
+	protected function addUser($data) {		
+		$first_team ['userTeam'] = $data [2] ['D'] . '-' . $data [2] ['E'];
 		$first_team ['flag'] = 0;
 		foreach ( $data as $k => $v ) {
 			unset ( $result );
 			foreach ( $v as $key => $value ) {
 				$key == 'B' ? $result ['userName'] = trim ( $value ) : '';
 				$key == 'C' ? $result ['workId'] = $value : '';
-				$key == 'D' ? $result ['userTeam'] = ($v ['E'] == '' ? $value : $value . '/' . $v ['E']) : '';
+				$key == 'D' ? $result ['userTeam'] = ($v ['E'] == '' ? $value : $value . '-' . $v ['E']) : '';
 				$key == 'F' ? $result ['telphone'] = $value : '';
 				$key == 'G' ? $result ['shortNum'] = $value : '';
 				$key == 'H' ? $result ['userEmail'] = $value : '';
@@ -182,7 +187,13 @@ class UserAction extends Action {
 				$user->add ( $result );
 				$logs = M ( 'logs_info' );
 				$logsData ['logDetail'] = date ( 'Y-m-d H:i:s' ) . ':' . session ( 'userName' ) . '批量添加'.$result ['userName'];
-			} 
+			}else{
+				unset($result['userType']);
+				$user->where($where)->save($result);
+				
+			}
+              
+			
 		}
 	}
     /**

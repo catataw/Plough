@@ -136,14 +136,16 @@ class CommonAction extends Action {
     public function getBigLeader(){
         return array(
             '全兵',
-            '陆扬',
             '刘超1',
             '高天铎',
-            '孙小霞',
+            '李斌',
             '李光瑞',
-            '王宝晗',
+            '沈国栋',
             '王振亚',
-            '周绚'
+            '王远志',
+        	'罗志成',
+        	'支敏慧',
+        	'吴文昊'
         );
     }
 
@@ -152,10 +154,11 @@ class CommonAction extends Action {
      */
     public function getFugle(){
         return array(
-            '钱岭',
+            '庞哲翀',
             '齐骥',
-            '赵立芬',
-            '刘训焱'
+            '王宝晗',
+            '孙小霞',
+        	'齐骥'	
         );
     }
 
@@ -164,10 +167,10 @@ class CommonAction extends Action {
     */
     public function getPMO(){
         return array(
-            '方云',
+            '王振亚',
             '张红',
-            '陈佳瑜',
-            '冯华莲'
+            '于娴',
+            '吴辉'
         );
     }
 
