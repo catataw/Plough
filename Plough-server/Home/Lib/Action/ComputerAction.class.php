@@ -196,7 +196,8 @@ class ComputerAction extends Action {
 									WHERE pmo_computer_info.userEmail !=  "" and pmo_computer_info.isDelete=1' );
 		if ($teams) {
 			foreach ( $teams as $k => $v ) {
-				$result ['name'] = str_replace ( '大数据产品部/', '', $v ['userTeam'] );
+				$teamNameArr = explode('-',$v ['userTeam']);
+				$result ['name'] = $teamNameArr[count($teamNameArr)-1];
 				$countArr = $Model->query ( 'SELECT count(*)
 											FROM pmo_user_info
 											JOIN pmo_computer_info ON pmo_user_info.userEmail = pmo_computer_info.userEmail

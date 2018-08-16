@@ -45,8 +45,8 @@ class ProjectProcessAction extends Action
     }
 
     /**
-     *   获取项目进展列表
-     */
+    *   获取项目进展列表
+    */
     public function getProcess($id){
         $process = M('project_process');
 //        $result = $process->where('relatedId='.$id)->order('updateTime desc')->find();
@@ -120,18 +120,7 @@ class ProjectProcessAction extends Action
      */
     public function deleteProcess($id){
         $process = M('project_process');
-        $relatedId = $process->where('id='.$id)->field("relatedId")->select();
         if($process->where('id='.$id)->delete()){
-            //子表同步至主表
-            $latestProcess = $process->where('relatedId='.$relatedId[0]['relatedId'])->order('id desc')->limit(1)->select();
-            $LatestProcessData = array(
-                'risk' => $latestProcess[0]['risk'],
-                'responseMeasures' => $latestProcess[0]['responseMeasures'],
-                'currentProgress' => $latestProcess[0]['currentProgress']
-            );
-            $projects = M('projects');
-            $projects->where('id='.$latestProcess[0]['relatedId'])->save( $LatestProcessData);
-            //保存日志
             $projects = M('projects');
             $projectName = $projects->where('id=' . $id)->field('projectName')->select();
             $logs = M('logs_info');
@@ -144,29 +133,39 @@ class ProjectProcessAction extends Action
     }
 
     public function autoAdd(){
+    	set_time_limit(0);
         $currentTime['updateTime'] = date('Y-m-d H:i:s');
-//        $start = date('Y-m-d H:i:s', strtotime('last monday'));
-//        $end = date('Y-m-d H:i:s', strtotime('this tuesday') + 7 * 24 * 60 * 60);
         $start = date('Y-m-d',(time()-((date('w')==0?7:date('w'))-1)*24*3600));//本周一
         $end = date('Y-m-d',(time()+(7-(date('w')==0?7:date('w'))+1)*24*3600));//下周一
         $projects = M('projects');
-        $result = $projects->where('risk!=""')->field('id,risk')->order('id asc')->select();
+        $result = $projects->where('risk!=""')->field('id,risk,commerceStatus')->order('id asc')->select();
         $process = M('project_process');
-        foreach($result as $key => $value)
-        {
-            $tempData['relatedId'] = $value['id'];
-            $tempData['risk'] = $value['risk'];
-            $data = array_merge($tempData,$currentTime);
-            //如果本周已经存在某项目，则不添加
-            $where['relatedId'] = $value['id'];
-            $where['updateTime'] = array('between',array($start,$end));
-            if(!$process->where($where)->select()) {
-                $process->add($data);
-                $projectName = $projects->where('id=' . $value['id'])->field('projectName')->select();
-                $logs = M('logs_info');
-                $logsData ['logDetail'] = date('Y-m-d H:i:s') . ':'  . '系统自动添加项目(' . $projectName[0]['projectName'] . ")进展信息";
-                $logs->add($logsData);
-            }
+        foreach($result as $key => $value){
+        	$where['relatedId'] = $value['id'];
+        	$projectProcess =  M('project_process')
+	        	->where($where)
+	        	->order('id desc')
+	        	->limit(1)
+	        	->select();
+        	
+        	if($projectProcess[0]['process']==100||$value['commerceStatus']=='已结项'){
+        		continue;
+        	}else{
+        		$tempData['relatedId'] = $value['id'];
+        		$tempData['risk'] = '未知';
+        		$data = array_merge($tempData,$currentTime);
+        		//如果本周已经存在某项目，则不添加
+        		$where['relatedId'] = $value['id'];
+        		$where['updateTime'] = array('between',array($start,$end));
+        		if(!$process->where($where)->select()) {
+        			$process->add($data);
+        			$projectName = $projects->where('id=' . $value['id'])->field('projectName')->select();
+        			$logs = M('logs_info');
+        			$logsData ['logDetail'] = date('Y-m-d H:i:s') . ':'  . '系统自动添加项目(' . $projectName[0]['projectName'] . ")进展信息";
+        			$logs->add($logsData);
+        		}
+        	}
         }
+        echo '200';
     }
 }

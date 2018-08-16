@@ -315,7 +315,7 @@ class ComputermonitorAction extends Action {
 		foreach($allInterface as $key=>$value){
 			$sql = 'select itemid from items where hostid="'.$value[0]['hostid'].'" and key_="mem-usage"';
 			$oneMemItem = $items->query($sql);
-			$sqlTrends = 'select itemid,clock,value_max from trends where clock>1511107200 and itemid='.$oneMemItem[0]['itemid'];
+			$sqlTrends = 'select itemid,clock,value_max from trends where clock>1531703735 and itemid='.$oneMemItem[0]['itemid'];
 			$trendsMem = $trends->query($sqlTrends);
             foreach ($trendsMem as $value){
             	$existSql = 'select itemid from pmo_trends where clock="'.$value['clock'].'" and itemid="'.$value['itemid'].'";';
@@ -332,7 +332,7 @@ class ComputermonitorAction extends Action {
 		foreach($allInterface as $key=>$value){
 			$sql = 'select itemid from items where hostid="'.$value[0]['hostid'].'" and key_="system.cpu.util[,idle]"';
 			$oneCpuItem = $items->query($sql);
-			$sqlTrends = 'select itemid,clock,value_max from trends where clock>1511107200 and itemid='.$oneCpuItem[0]['itemid'];
+			$sqlTrends = 'select itemid,clock,value_max from trends where clock>1531703735 and itemid='.$oneCpuItem[0]['itemid'];
 			$trendsMem = $trends->query($sqlTrends);
 			foreach ($trendsMem as $value){
 			$existSql = 'select itemid from pmo_trends where clock="'.$value['clock'].'" and itemid="'.$value['itemid'].'";';
