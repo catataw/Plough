@@ -24,6 +24,8 @@
             <th class="col-md-1 col-lg-1">产品名称</th>
             <th class="col-md-1 col-lg-1">产品版本</th>
             <th class="col-md-1 col-lg-1">是否有实施JIRA</th>
+            <th class="col-md-1 col-lg-1">JIRA号</th>
+            <th class="col-md-1 col-lg-1">割接总结</th>
             <th class="col-md-1 col-lg-1">备注</th>
           </tr>
 
@@ -44,6 +46,8 @@
              <td class="col-md-1 col-lg-1">{{treeValue.production}}</td>
              <td class="col-md-1 col-lg-1">{{treeValue.productionVersion}}</td>
              <td class="col-md-1 col-lg-1">{{treeValue.haveJira}}</td>
+             <td class="col-md-1 col-lg-1">{{treeValue.jiraId}}</td>
+             <td class="col-md-1 col-lg-1">{{treeValue.conclusion}}</td>
              <td class="col-md-1 col-lg-1">{{treeValue.remarks}}</td>
            </tr>
          {{/each}}

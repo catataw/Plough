@@ -11,7 +11,7 @@ export default Ember.Controller.extend({
       var userInfo = this.get('userInfo')
       var userEmail = userInfo['userEmail'];
       var userPassword = userInfo['userPassword'];
-      console.log(baseUrl+'?userEmail='+userEmail+'&userPassword='+userPassword);
+     // console.log(baseUrl+'?userEmail='+userEmail+'&userPassword='+userPassword);
       return baseUrl+'?userEmail='+userEmail+'&userPassword='+userPassword;
     }
   }),

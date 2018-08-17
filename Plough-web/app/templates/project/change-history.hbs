@@ -1,6 +1,6 @@
 <div class="row">
   <div>
-    <p class="page-header pmo-header title-p ">生产调度-项目变更（2018）</p>
+    <p class="page-header pmo-header title-p ">生产跟踪-项目割接（2018）</p>
   </div>
 </div>
 
@@ -46,6 +46,8 @@
           <th class="col-md-1 col-lg-1">产品名称</th>
           <th class="col-md-1 col-lg-1">产品版本</th>
           <th class="col-md-1 col-lg-1">是否走jira</th>
+          <th class="col-md-1 col-lg-1">JIRA号</th>
+          <th class="col-md-1 col-lg-1">割接总结</th>
           <th class="col-md-1 col-lg-1">备注</th>
           <th>操作</th>
         </tr>
@@ -70,6 +72,8 @@
                 <td class="col-md-1 col-lg-1" title={{treeValue.production}}>{{treeValue.production}}</td>
                 <td class="col-md-1 col-lg-1">{{treeValue.productionVersion}}</td>
                 <td class="col-md-1 col-lg-1">{{treeValue.haveJira}}</td>
+                <td class="col-md-1 col-lg-1">{{treeValue.jiraId}}</td>
+                <td class="col-md-1 col-lg-1">{{treeValue.conclusion}}</td>
                 <td class="col-md-1 col-lg-1" title={{treeValue.remarks}}>{{treeValue.remarks}}</td>
                 {{#if treeValue.isEdit}}
                 <td>
@@ -107,7 +111,7 @@
     <div class="modal-content">
       <div class="modal-header" >
         <button type="button" class="close" data-dismiss="modal" aria-label="Close" {{action 'closeAddChangeHistory'}} ><span aria-hidden="true">&times;</span></button>
-        <h4 class="modal-title">生产调度-项目变更-添加</h4>
+        <h4 class="modal-title">生产跟踪-项目割接-添加</h4>
       </div>
       <div class="modal-body form-modal ">
         <div class="col-lg-12 col-md-12">
@@ -150,7 +154,7 @@
                 </div>
 
                 <div class="form-group  col-lg-12 col-md-12 add-row">
-                  <label class="col-lg-1 col-md-1 project-label">割接负责人（现场）：</label>
+                  <label class="col-lg-1 col-md-1 project-label">割接负责人：</label>
                   <div class="col-lg-5 col-md-5 div-80">
                     {{input value=addChangeRecord.sceneDirector class="form-control"}}
                   </div>
@@ -198,11 +202,19 @@
               {{/x-select}}
             </div>
 
+            <div class="form-group col-lg-6 col-md-6">
+              <label>割接总结：</label>
+              {{textarea value=addChangeRecord.conclusion placeholder='割接总结' rows=3 class="form-control"}}
+            </div>
 
 
             <div class="form-group col-lg-6 col-md-6">
               <label>备注：</label>
               {{textarea value=addChangeRecord.remarks placeholder='备注内容' rows=3 class="form-control"}}
+            </div>
+            <div class="form-group col-lg-6 col-md-6">
+              <label>JIRA号：</label>
+              {{input value=addChangeRecord.jiraId class="form-control"}}
             </div>
 
           </form>
@@ -230,7 +242,7 @@
     <div class="modal-content">
       <div class="modal-header" >
         <button type="button" class="close" data-dismiss="modal" aria-label="Close" {{action 'closeEditChangeHistory'}} ><span aria-hidden="true">&times;</span></button>
-        <h4 class="modal-title">生产调度-项目变更-编辑</h4>
+        <h4 class="modal-title">生产跟踪-项目割接-编辑</h4>
       </div>
       <div class="modal-body form-modal ">
         <div class="col-lg-12 col-md-12">
@@ -275,7 +287,7 @@
 
                 <div class="form-group  col-lg-12 col-md-12 add-row">
 
-                  <label class="col-lg-1 col-md-1 project-label">割接负责人（现场）：</label>
+                  <label class="col-lg-1 col-md-1 project-label">割接负责人：</label>
                   <div class="col-lg-5 col-md-5 div-80">
                     {{input value=editItem.sceneDirector class="form-control"}}
                   </div>
@@ -321,8 +333,18 @@
             </div>
 
             <div class="form-group col-lg-6 col-md-6">
+              <label>割接总结：</label>
+              {{textarea value=editItem.conclusion placeholder='割接总结' rows=3 class="form-control"}}
+            </div>
+
+
+            <div class="form-group col-lg-6 col-md-6">
               <label>备注：</label>
               {{textarea value=editItem.remarks placeholder='备注内容' rows=3 class="form-control"}}
+            </div>
+            <div class="form-group col-lg-6 col-md-6">
+              <label>JIRA号：</label>
+              {{input value=editItem.jiraId class="form-control"}}
             </div>
           </form>
         </div>

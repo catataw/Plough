@@ -13,6 +13,7 @@ export default Ember.Route.extend({
       var appController = this.controllerFor('application');
       var jobtimeWriteController = this.controllerFor('jobtime-write');
       var jobtimeWeekdayController = this.controllerFor('job-time-weekday');
+      var solProject =this.controllerFor('project/sol-project');
       var data = {};
       data['userEmail'] = controller.get('userEmail');
       data['userPassword'] = controller.get('userPassword');
@@ -23,24 +24,24 @@ export default Ember.Route.extend({
       }).then((result) => {
         if(result.userEmail){
           this.get('session').set('isAuthenticated', true);
-          if(data.userType==2){
+          if(result.userType==2){
             this.get('session').set('isSuper', true);
             this.get('session').set('isAdmin', false);
             this.get('session').set('isOrigin', false);
             this.get('session').set('isTeamLeader', false);
             this.get('session').set('isBigTeamLeader', false);
-          }else if(data.userType==3){
+          }else if(result.userType==3){
             this.get('session').set('isAdmin', true);
             this.get('session').set('isOrigin', false);
             this.get('session').set('isSuper', false);
             this.get('session').set('isTeamLeader', false);
-          }else if(data.userType==4){
+          }else if(result.userType==4){
             this.get('session').set('isOrigin', false);
             this.get('session').set('isSuper', false);
             this.get('session').set('isAdmin', false);
             this.get('session').set('isTeamLeader', true);
             this.get('session').set('isBigTeamLeader', false);
-          } else if(data.userType==1){
+          } else if(result.userType==1){
             this.get('session').set('isOrigin', true);
             this.get('session').set('isSuper', false);
             this.get('session').set('isAdmin', false);
@@ -53,6 +54,7 @@ export default Ember.Route.extend({
             this.get('session').set('isTeamLeader', false);
             this.get('session').set('isBigTeamLeader', true);
           }
+          solProject.set('userInfo',data);
           appController.set('userInfo',result);
           jobtimeWriteController.set('userInfo',result);
           jobtimeWeekdayController.set('userInfo',result);
