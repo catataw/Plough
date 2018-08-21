@@ -148,10 +148,9 @@ class ProjectProcessAction extends Action
 	        	->limit(1)
 	        	->select();
         	
-        	if($projectProcess[0]['process']==100||$value['commerceStatus']=='已结项'){
-        		continue;
-        	}else{
-        		$tempData['relatedId'] = $value['id'];
+        	
+        	if($projectProcess[0]['process']!=100&&$value['commerceStatus']!='已结项'){
+        	$tempData['relatedId'] = $value['id'];
         		$tempData['risk'] = '未知';
         		$data = array_merge($tempData,$currentTime);
         		//如果本周已经存在某项目，则不添加
@@ -164,6 +163,8 @@ class ProjectProcessAction extends Action
         			$logsData ['logDetail'] = date('Y-m-d H:i:s') . ':'  . '系统自动添加项目(' . $projectName[0]['projectName'] . ")进展信息";
         			$logs->add($logsData);
         		}
+        		unset($where);
+        		unset($projectProcess);
         	}
         }
         echo '200';

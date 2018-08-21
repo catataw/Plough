@@ -135,6 +135,35 @@ class ProjectAction extends Action {
 		
 	}
 	
+	/**
+	 * 同步项目状态接口
+	 */
+	
+	public function updateProjectStatus(){
+	      $Status = M('project_status');
+	      $projects = M('projects');
+	      $data = $projects
+		      ->field('id')
+		      ->where('risk !=""')
+		      ->select();
+	      foreach ($data as $value){
+	      	$where['relatedId'] = $value['id'];
+	      	$latest = $Status->where($where)->order('id desc')->limit(1)->select();
+	
+	      	//$LateststatusData 是最新的数据状态
+	      	$LatestStatusData = array(
+	      			'commerceStatus' => $latest[0] ['commerceStatus'],
+	      			'implementBases' => $latest[0]['implementBases'],
+	      			'developStatus' => $latest[0]['developStatus'],
+	      			'operateStatus' => $latest[0]['operateStatus'],
+	      			'implementStatus' =>$latest[0]['implementStatus'],
+	      			'onlineStatus' => $latest[0]['onlineStatus']
+	      	);
+	      	$result = $projects -> where('id='.$value['id']) -> save($LatestStatusData );
+	      }
+	      echo '200';
+	}
+	
 	
 
 	/**
@@ -235,9 +264,9 @@ class ProjectAction extends Action {
 			
 			if($v['planFinishedTime']){
 				if($v['planFinishedTime']>date('Y-m-t')){
-					$v['isOverdue'] = '是';
-				}else{
 					$v['isOverdue'] = '否';
+				}else{
+					$v['isOverdue'] = '是';
 				}
 			}else{
 				$v['isOverdue'] = '';
